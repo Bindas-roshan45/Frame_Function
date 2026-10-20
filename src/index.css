@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-bg: #F5F3EF;
+  --color-warm-surface: #F0EEEA;
+  --color-dark-bg: #171717;
+  --color-dark-surface: #1E1E1E;
+  --color-dark-card: #222222;
+  --color-brand-orange: #FF5A0A;
+  --color-brand-orange-light: #FF732E;
+  --color-brand-dark: #111111;
+  --color-brand-muted: #666666;
+
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-hand: "Caveat", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #F5F3EF;
+  color: #111111;
+  font-family: 'Inter', sans-serif;
+  overflow-x: clip;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-hand {
+  font-family: 'Caveat', cursive;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F3EF;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8d4cd;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF5A0A;
+}
+
+/* Glow Helpers */
+.glow-orange {
+  box-shadow: 0 0 50px -10px rgba(255, 90, 10, 0.45);
+}
+
+.glow-orange-subtle {
+  box-shadow: 0 0 35px -8px rgba(255, 90, 10, 0.25);
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
