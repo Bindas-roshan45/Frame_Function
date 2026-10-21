@@ -208,6 +208,121 @@ export default function About() {
         </div>
       </motion.div>
 
+      {/* Meet Our Founders — Ayush (Co-Founder) */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-24"
+      >
+        <div className="bg-[#0A0B0E] text-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-white/10 shadow-2xl overflow-hidden relative">
+          {/* Subtle ambient lighting glows */}
+          <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#FF5A0A]/15 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-[#FF5A0A]/10 blur-3xl pointer-events-none" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+            {/* Left Column: Founder information and text */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#FF5A0A] uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
+                <span>MEET OUR FOUNDERS</span>
+              </div>
+
+              <div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading leading-tight tracking-tight text-white">
+                  Building Our Vision, <span className="text-[#FF5A0A]">Together.</span>
+                </h2>
+                <p className="mt-4 text-sm sm:text-base text-[#A0A5B5] leading-relaxed">
+                  Great ideas deserve great execution. At Frame &amp; Function, we combine creativity, technology, and strategy to build meaningful digital experiences. As co-founders, we share one vision: helping brands grow through thoughtful design and innovative digital solutions.
+                </p>
+              </div>
+
+              {/* Highlight callout text */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 relative overflow-hidden backdrop-blur-sm">
+                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FF5A0A] to-[#FF732E]" />
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#FF5A0A] mb-1">
+                  Guiding Philosophy
+                </p>
+                <p className="text-sm sm:text-base font-extrabold font-heading text-white tracking-wide">
+                  Creative Thinking. Digital Innovation. Shared Vision.
+                </p>
+              </div>
+
+              {/* Equal Co-Founder Pillars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-[#FF5A0A] text-base font-black font-heading">Thoughtful Design</p>
+                  <p className="text-xs text-[#A0A5B5] mt-1.5 leading-relaxed">
+                    Crafting intuitive digital architectures and aesthetic identities that set industry standards.
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <p className="text-[#FF5A0A] text-base font-black font-heading">Digital Solutions</p>
+                  <p className="text-xs text-[#A0A5B5] mt-1.5 leading-relaxed">
+                    Transforming complex brand requirements into fast, scalable, and high-impact digital products.
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF5A0A] hover:bg-[#ff6a1f] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-[0_0_24px_rgba(255,90,10,0.4)] cursor-pointer group"
+                >
+                  <span>Let's Work Together</span>
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+                <a
+                  href={`https://wa.me/${agencyInfo.contact.whatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold border border-white/10 transition-all cursor-pointer"
+                >
+                  <span>Chat on WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right Column: Ayush's photograph */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative group w-full max-w-sm sm:max-w-md">
+                {/* Frame accent glow */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-[#FF5A0A] via-white/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity blur-xs" />
+
+                {/* Premium Frame with subtle rounded corners and hover animation */}
+                <div className="relative rounded-2xl overflow-hidden bg-[#16181F] border border-white/15 aspect-[3/4] shadow-2xl transition-all duration-500 group-hover:border-[#FF5A0A]/40">
+                  <img
+                    src="/images/ayush.png"
+                    alt="Ayush - Co-Founder of Frame & Function"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {/* Subtle bottom vignette gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A0B0E] via-transparent to-transparent opacity-60 pointer-events-none" />
+
+                  {/* Overlay Tag */}
+                  <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-[#0A0B0E]/90 backdrop-blur-md border border-white/10">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-white font-bold text-sm sm:text-base font-heading">Ayush</p>
+                        <p className="text-[#FF5A0A] text-xs font-semibold">Co-Founder of Frame &amp; Function</p>
+                      </div>
+                      <span className="w-2 h-2 rounded-full bg-[#FF5A0A] animate-pulse" />
+                    </div>
+                    <p className="text-[11px] text-[#A0A5B5] mt-2 pt-2 border-t border-white/10 italic leading-snug">
+                      “Creative Thinking. Digital Innovation. Shared Vision.”
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* 4-Step Process Section with 3D Render Cards */}
       <div className="mb-24">
         <div className="mb-12">
