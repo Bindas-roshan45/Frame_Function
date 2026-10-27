@@ -97,15 +97,8 @@ export default function Home() {
     heroMouseY.set(0)
   }
 
-  // Scroll away transforms for Hero 3D Composition
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  })
-  const heroScrollRotateZ = useTransform(heroScroll, [0, 1], [0, -8])
-  const heroScrollTranslateX = useTransform(heroScroll, [0, 1], [0, 30])
-  const heroScrollScale = useTransform(heroScroll, [0, 1], [1, 0.94])
-  const heroScrollOpacity = useTransform(heroScroll, [0, 0.85], [1, 0.25])
+  // Hero mouse interactive tilt
+  // Scroll fade/blur removed to keep hero image crisp, sharp, and 100% visible at all times
 
   // CTA Section scroll parallax
   const ctaRef = useRef(null)
@@ -316,7 +309,7 @@ export default function Home() {
             {/* Ambient Floating Orange Particles */}
             <FloatingParticles count={14} className="inset-0 sm:-inset-8" />
 
-            {/* Scroll-Linked and Mouse-Tilt 3D Wrapper */}
+            {/* Mouse-Tilt 3D Wrapper (Scroll-blur and opacity fade disabled to keep image 100% sharp and solid) */}
             <motion.div
               style={
                 shouldReduceMotion
@@ -324,17 +317,16 @@ export default function Home() {
                   : {
                       rotateX: isMobile ? 0 : heroTiltX,
                       rotateY: isMobile ? 0 : heroTiltY,
-                      rotateZ: isMobile ? 0 : heroScrollRotateZ,
-                      x: isMobile ? 0 : heroScrollTranslateX,
-                      scale: heroScrollScale,
-                      opacity: heroScrollOpacity,
                       transformStyle: 'preserve-3d',
+                      WebkitBackfaceVisibility: 'hidden',
+                      backfaceVisibility: 'hidden',
+                      willChange: 'transform',
                     }
               }
-              initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.92, y: shouldReduceMotion ? 0 : 25 }}
+              initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95, y: shouldReduceMotion ? 0 : 25 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full perspective-[1200px]"
+              className="relative w-full perspective-[1000px]"
             >
               {/* Floating Container */}
               <motion.div
@@ -346,7 +338,7 @@ export default function Home() {
                 <img
                   src="/images/hero_composition.webp"
                   alt="Frame & Function 3D Hero Scene with floating laptop, tablets, and devices"
-                  className="w-full h-auto object-cover select-none"
+                  className="w-full h-auto object-cover select-none transform-gpu"
                   fetchPriority="high"
                   decoding="async"
                 />
@@ -358,7 +350,7 @@ export default function Home() {
                   transition={{ delay: 1.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute top-2 left-2 sm:top-4 sm:left-6 block pointer-events-none select-none"
                 >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-6deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-6deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
                     Website<br />Development ➔
                   </span>
                 </motion.div>
@@ -369,7 +361,7 @@ export default function Home() {
                   transition={{ delay: 1.85, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute top-2 right-2 sm:top-4 sm:right-6 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[4deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[4deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
                     Video Editing<br />&amp; Reels ➔
                   </span>
                 </motion.div>
@@ -380,7 +372,7 @@ export default function Home() {
                   transition={{ delay: 2.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute bottom-12 right-2 sm:bottom-28 sm:right-4 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-5deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-5deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
                     Social Media<br />Management ➔
                   </span>
                 </motion.div>
@@ -391,7 +383,7 @@ export default function Home() {
                   transition={{ delay: 2.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute bottom-2 right-6 sm:bottom-6 sm:right-20 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-[11px] sm:text-lg font-bold text-[#111111] rotate-[2deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
+                  <span className="font-hand text-[11px] sm:text-lg font-bold text-[#111111] rotate-[2deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
                     Branding &amp;<br />Graphic Design ➔
                   </span>
                 </motion.div>
