@@ -16,7 +16,7 @@ export default function Logo({ light = false, className = '' }) {
       </div>
 
       <span
-        className={`font-heading font-extrabold text-lg sm:text-xl tracking-tight transition-colors ${
+        className={`font-heading font-extrabold text-base sm:text-xl tracking-tight transition-colors ${
           light ? 'text-white' : 'text-[#111111]'
         }`}
       >

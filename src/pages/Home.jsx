@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   motion,
@@ -60,6 +60,13 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [selectedProject, setSelectedProject] = useState(null)
   const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 1024 : false))
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024)
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Top scroll progress bar
   const { scrollYProgress } = useScroll()
@@ -77,7 +84,7 @@ export default function Home() {
   const heroTiltY = useSpring(heroMouseX, { stiffness: 220, damping: 25 })
 
   const handleHeroMouseMove = (e) => {
-    if (shouldReduceMotion) return
+    if (shouldReduceMotion || isMobile) return
     const rect = e.currentTarget.getBoundingClientRect()
     const xPct = (e.clientX - rect.left) / rect.width - 0.5
     const yPct = (e.clientY - rect.top) / rect.height - 0.5
@@ -96,8 +103,8 @@ export default function Home() {
     offset: ['start start', 'end start'],
   })
   const heroScrollRotateZ = useTransform(heroScroll, [0, 1], [0, -8])
-  const heroScrollTranslateX = useTransform(heroScroll, [0, 1], [0, 45])
-  const heroScrollScale = useTransform(heroScroll, [0, 1], [1, 0.92])
+  const heroScrollTranslateX = useTransform(heroScroll, [0, 1], [0, 30])
+  const heroScrollScale = useTransform(heroScroll, [0, 1], [1, 0.94])
   const heroScrollOpacity = useTransform(heroScroll, [0, 0.85], [1, 0.25])
 
   // CTA Section scroll parallax
@@ -136,9 +143,9 @@ export default function Home() {
       -------------------------------------------------------------------------- */}
       <section
         ref={heroRef}
-        className="relative pt-32 pb-16 lg:pt-36 lg:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible"
+        className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 lg:pt-36 lg:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-6 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
           {/* Left Column: Typography & CTAs */}
           <div className="lg:col-span-5 space-y-6">
             {/* Small Label Pill */}
@@ -153,7 +160,7 @@ export default function Home() {
             </motion.div>
 
             {/* Main Headline: Animated Word-by-Word with Highlighted Accent */}
-            <h1 className="text-5xl sm:text-7xl xl:text-8xl font-black font-heading tracking-tight text-[#111111] leading-[0.95]">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl xl:text-8xl font-black font-heading tracking-tight text-[#111111] leading-[1.0] sm:leading-[0.95]">
               <motion.span
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 35 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -180,7 +187,7 @@ export default function Home() {
                   className="text-[#FF5A0A] inline-flex items-baseline"
                 >
                   {agencyInfo.headlineAccent}
-                  <span className="text-xl sm:text-2xl font-bold ml-1 text-[#FF5A0A] -translate-y-6 sm:-translate-y-10">
+                  <span className="text-base sm:text-2xl font-bold ml-1 text-[#FF5A0A] -translate-y-4 sm:-translate-y-10">
                     &reg;
                   </span>
                 </motion.span>
@@ -211,16 +218,17 @@ export default function Home() {
               initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.75, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
-              className="pt-2 flex flex-wrap items-center gap-3"
+              className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
             >
               <motion.div
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                className="w-full sm:w-auto"
               >
                 <Link
                   to="/contact"
-                  className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#111111] text-white text-sm font-semibold hover:bg-black/85 transition-all shadow-md"
+                  className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#111111] text-white text-sm font-semibold hover:bg-black/85 transition-all shadow-md active:scale-98"
                 >
                   <span>Start a Project</span>
                   <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -233,7 +241,7 @@ export default function Home() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="group inline-flex items-center gap-2 px-5 py-3.5 rounded-full border border-black/10 bg-white text-[#111111] text-sm font-semibold hover:bg-black/5 hover:border-black/25 transition-all cursor-pointer"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border border-black/10 bg-white text-[#111111] text-sm font-semibold hover:bg-black/5 hover:border-black/25 transition-all cursor-pointer active:scale-98"
               >
                 <span>Explore Work</span>
                 <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-[#FF5A0A] group-hover:text-white transition-colors">
@@ -284,29 +292,29 @@ export default function Home() {
 
           {/* Right Column: 3D Composition with Rotating Orbital Rings, Particles & Mouse Parallax */}
           <div
-            className="lg:col-span-7 relative"
+            className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible"
             onMouseMove={handleHeroMouseMove}
             onMouseLeave={handleHeroMouseLeave}
           >
             {/* Rotating 3D Neon Rings around the composition */}
             <OrbitalRing
-              size={460}
+              size={440}
               tiltX={70}
               tiltY={20}
               duration={24}
-              className="-top-12 -left-12 -z-10 opacity-70"
+              className="-top-6 sm:-top-12 -left-6 sm:-left-12 -z-10 opacity-60 scale-75 sm:scale-100 origin-center"
             />
             <OrbitalRing
-              size={360}
+              size={340}
               tiltX={55}
               tiltY={-25}
               duration={18}
               reverse
-              className="-bottom-8 -right-8 -z-10 opacity-60"
+              className="-bottom-6 sm:-bottom-8 -right-6 sm:-right-8 -z-10 opacity-50 scale-75 sm:scale-100 origin-center"
             />
 
             {/* Ambient Floating Orange Particles */}
-            <FloatingParticles count={14} className="-inset-8" />
+            <FloatingParticles count={14} className="inset-0 sm:-inset-8" />
 
             {/* Scroll-Linked and Mouse-Tilt 3D Wrapper */}
             <motion.div
@@ -314,10 +322,10 @@ export default function Home() {
                 shouldReduceMotion
                   ? {}
                   : {
-                      rotateX: heroTiltX,
-                      rotateY: heroTiltY,
-                      rotateZ: heroScrollRotateZ,
-                      x: heroScrollTranslateX,
+                      rotateX: isMobile ? 0 : heroTiltX,
+                      rotateY: isMobile ? 0 : heroTiltY,
+                      rotateZ: isMobile ? 0 : heroScrollRotateZ,
+                      x: isMobile ? 0 : heroScrollTranslateX,
                       scale: heroScrollScale,
                       opacity: heroScrollOpacity,
                       transformStyle: 'preserve-3d',
@@ -332,7 +340,7 @@ export default function Home() {
               <motion.div
                 animate={shouldReduceMotion ? {} : { y: [0, -10, 0] }}
                 transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1.55 }}
-                className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-black/5"
+                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-black/5"
               >
                 {/* Primary 3D Composition Render */}
                 <img
@@ -348,9 +356,9 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-4 left-6 hidden sm:block pointer-events-none select-none"
+                  className="absolute top-2 left-2 sm:top-4 sm:left-6 block pointer-events-none select-none"
                 >
-                  <span className="font-hand text-xl font-bold text-[#111111] rotate-[-6deg] inline-block">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-6deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
                     Website<br />Development ➔
                   </span>
                 </motion.div>
@@ -359,9 +367,9 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.85, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-4 right-6 hidden sm:block pointer-events-none select-none text-right"
+                  className="absolute top-2 right-2 sm:top-4 sm:right-6 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-xl font-bold text-[#111111] rotate-[4deg] inline-block">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[4deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
                     Video Editing<br />&amp; Reels ➔
                   </span>
                 </motion.div>
@@ -370,9 +378,9 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 2.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-28 right-4 hidden sm:block pointer-events-none select-none text-right"
+                  className="absolute bottom-12 right-2 sm:bottom-28 sm:right-4 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-xl font-bold text-[#111111] rotate-[-5deg] inline-block">
+                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-5deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
                     Social Media<br />Management ➔
                   </span>
                 </motion.div>
@@ -381,9 +389,9 @@ export default function Home() {
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 2.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-6 right-20 hidden sm:block pointer-events-none select-none text-right"
+                  className="absolute bottom-2 right-6 sm:bottom-6 sm:right-20 block pointer-events-none select-none text-right"
                 >
-                  <span className="font-hand text-lg font-bold text-[#111111] rotate-[2deg] inline-block">
+                  <span className="font-hand text-[11px] sm:text-lg font-bold text-[#111111] rotate-[2deg] inline-block bg-white/70 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none">
                     Branding &amp;<br />Graphic Design ➔
                   </span>
                 </motion.div>
@@ -427,14 +435,14 @@ export default function Home() {
       {/* -------------------------------------------------------------------------
           SECTION 2 — SERVICES ("WHAT WE DO") - 3D INTERACTIVE TILT CARDS
       -------------------------------------------------------------------------- */}
-      <section id="what-we-do" className="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <section id="what-we-do" className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden sm:overflow-visible">
         {/* Background Decorative Orbital Accent */}
         <OrbitalRing
-          size={360}
+          size={340}
           tiltX={75}
           tiltY={15}
           duration={28}
-          className="-top-16 -right-16 -z-10 opacity-35"
+          className="-top-8 sm:-top-16 -right-8 sm:-right-16 -z-10 opacity-30 scale-75 sm:scale-100 origin-center"
         />
 
         {/* Header row */}
@@ -443,14 +451,14 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12"
         >
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
               <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
               <span>OUR SERVICES</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
               WHAT WE <span className="text-[#FF5A0A]">DO</span>
             </h2>
           </div>
@@ -464,67 +472,74 @@ export default function Home() {
           </Link>
         </motion.div>
 
-        {/* 5 Service Cards Grid with 3D Tilt - 2 per row on phone, 5 on desktop */}
+        {/* 5 Service Cards Grid with 3D Tilt - 2 per row on phone, 5th card balanced full-width, 5 on desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-5">
-          {services.map((service, idx) => (
-            <motion.div
-              key={service.id}
-              initial={{
-                opacity: 0,
-                y: shouldReduceMotion ? 0 : 35,
-                rotateY: shouldReduceMotion ? 0 : -6,
-              }}
-              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                duration: 0.7,
-                delay: idx * 0.12,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="h-full"
-            >
-              <TiltCard
-                maxTilt={8}
-                scaleOnHover={1.03}
-                glare={true}
-                className="h-full bg-white rounded-2xl p-2.5 sm:p-3 border border-black/5 shadow-xs hover:shadow-2xl hover:border-[#FF5A0A]/40 transition-shadow duration-300 flex flex-col justify-between group"
+          {services.map((service, idx) => {
+            const isFifth = idx === 4
+            return (
+              <motion.div
+                key={service.id}
+                initial={{
+                  opacity: 0,
+                  y: shouldReduceMotion ? 0 : 35,
+                  rotateY: shouldReduceMotion ? 0 : -6,
+                }}
+                whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{
+                  duration: 0.7,
+                  delay: idx * 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className={`h-full ${isFifth ? 'col-span-2 lg:col-span-1' : ''}`}
               >
-                {/* Top Image area */}
-                <div className="aspect-square w-full rounded-xl overflow-hidden bg-[#F0EEEA] relative mb-2 sm:mb-3">
-                  <motion.img
-                    src={service.image}
-                    alt={service.title}
-                    loading="lazy"
-                    decoding="async"
-                    whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
-                    transition={{ duration: 0.35, ease: 'easeOut' }}
-                    className="w-full h-full object-cover transition-transform duration-500"
-                  />
-                </div>
+                <TiltCard
+                  maxTilt={8}
+                  scaleOnHover={1.03}
+                  glare={true}
+                  className={`h-full bg-white rounded-2xl p-2.5 sm:p-3 border border-black/5 shadow-xs hover:shadow-2xl hover:border-[#FF5A0A]/40 transition-shadow duration-300 flex ${
+                    isFifth ? 'flex-row sm:flex-col items-center sm:items-stretch gap-3' : 'flex-col justify-between'
+                  } group`}
+                >
+                  {/* Top Image area */}
+                  <div className={`rounded-xl overflow-hidden bg-[#F0EEEA] relative shrink-0 ${
+                    isFifth ? 'w-20 h-20 sm:w-full sm:aspect-square mb-0 sm:mb-3' : 'aspect-square w-full mb-2 sm:mb-3'
+                  }`}>
+                    <motion.img
+                      src={service.image}
+                      alt={service.title}
+                      loading="lazy"
+                      decoding="async"
+                      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
+                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                      className="w-full h-full object-cover transition-transform duration-500"
+                    />
+                  </div>
 
-                {/* Title and Circular Arrow Button */}
-                <div className="flex items-center justify-between p-1 pt-0 gap-1.5">
-                  <h3 className="font-heading font-bold text-xs sm:text-sm text-[#111111] leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
-                    {service.title}
-                  </h3>
-                  <Link
-                    to={`/services#${service.id}`}
-                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111111] text-white flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:rotate-45 transition-all duration-300"
-                    aria-label={`Learn more about ${service.title}`}
-                  >
-                    <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  </Link>
-                </div>
-              </TiltCard>
-            </motion.div>
-          ))}
+                  {/* Title and Circular Arrow Button */}
+                  <div className="flex-1 flex items-center justify-between p-1 pt-0 gap-1.5 w-full">
+                    <h3 className="font-heading font-bold text-xs sm:text-sm text-[#111111] leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
+                      {service.title}
+                    </h3>
+                    <Link
+                      to={`/services#${service.id}`}
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111111] text-white flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:rotate-45 transition-all duration-300 active:scale-95"
+                      aria-label={`Learn more about ${service.title}`}
+                    >
+                      <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    </Link>
+                  </div>
+                </TiltCard>
+              </motion.div>
+            )
+          })}
         </div>
       </section>
 
       {/* -------------------------------------------------------------------------
           SECTION 3 — SELECTED WORK ("OUR WORK" - FULL-WIDTH DARK SECTION: #171717)
       -------------------------------------------------------------------------- */}
-      <section id="our-work" className="bg-[#171717] text-white py-24 lg:py-32 relative overflow-hidden">
+      <section id="our-work" className="bg-[#171717] text-white py-16 sm:py-24 lg:py-32 relative overflow-hidden">
         {/* Subtle orange ambient glow in background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#FF5A0A]/10 rounded-full blur-[160px] pointer-events-none" />
 
@@ -538,26 +553,26 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+            className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12"
           >
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#A0A5B5] uppercase mb-2">
                 <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
                 <span>SELECTED WORK</span>
               </div>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-white">
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-white">
                 OUR <span className="text-[#FF5A0A]">WORK</span>
               </h2>
             </div>
 
-            {/* Filter Pills matching reference screenshot */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Filter Pills matching reference screenshot with phone horizontal scroll */}
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-2 scrollbar-none sm:flex-wrap">
               {projectCategories.map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all cursor-pointer ${
                     activeCategory === cat
                       ? 'bg-[#FF5A0A] text-white font-semibold shadow-md shadow-[#FF5A0A]/30 scale-105'
                       : 'border border-white/10 text-[#A0A5B5] hover:text-white hover:border-white/20'
@@ -569,54 +584,61 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* 5 Visual Project Cards Grid with 3D Tilt - 2 per row on phone, 5 on desktop */}
+          {/* 5 Visual Project Cards Grid with 3D Tilt - 2 per row on phone with balanced 5th card, 5 on desktop */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-5">
             <AnimatePresence mode="popLayout">
-              {filteredProjects.map((project, idx) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: idx * 0.08,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="h-full"
-                >
-                  <TiltCard
-                    maxTilt={7}
-                    scaleOnHover={1.03}
-                    glare={true}
-                    onClick={() => setSelectedProject(project)}
-                    data-cursor="view"
-                    className="h-full bg-[#222222] rounded-2xl p-2.5 sm:p-3 border border-white/10 hover:border-[#FF5A0A]/60 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+              {filteredProjects.map((project, idx) => {
+                const isFifth = filteredProjects.length === 5 && idx === 4
+                return (
+                  <motion.div
+                    key={project.id}
+                    layout
+                    initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: idx * 0.08,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className={`h-full ${isFifth ? 'col-span-2 lg:col-span-1' : ''}`}
                   >
-                    {/* Top Mockup Image */}
-                    <div className="aspect-[4/3] w-full rounded-xl overflow-hidden bg-black/40 relative mb-2 sm:mb-3">
-                      <motion.img
-                        src={project.image}
-                        alt={project.title}
-                        whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
-                        transition={{ duration: 0.35, ease: 'easeOut' }}
-                        className="w-full h-full object-cover transition-transform duration-500"
-                      />
-                    </div>
-
-                    {/* Title and White Circular Arrow Button */}
-                    <div className="flex items-center justify-between p-1 pt-0 gap-1.5">
-                      <h3 className="font-heading font-bold text-xs sm:text-sm text-white leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
-                        {project.title}
-                      </h3>
-                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white text-[#111111] flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:text-white group-hover:rotate-45 transition-all duration-300">
-                        <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    <TiltCard
+                      maxTilt={7}
+                      scaleOnHover={1.03}
+                      glare={true}
+                      onClick={() => setSelectedProject(project)}
+                      data-cursor="view"
+                      className={`h-full bg-[#222222] rounded-2xl p-2.5 sm:p-3 border border-white/10 hover:border-[#FF5A0A]/60 shadow-lg hover:shadow-2xl transition-all duration-300 flex ${
+                        isFifth ? 'flex-row sm:flex-col items-center sm:items-stretch gap-3' : 'flex-col justify-between'
+                      } cursor-pointer group`}
+                    >
+                      {/* Top Mockup Image */}
+                      <div className={`rounded-xl overflow-hidden bg-black/40 relative shrink-0 ${
+                        isFifth ? 'w-24 h-20 sm:w-full sm:aspect-[4/3] mb-0 sm:mb-3' : 'aspect-[4/3] w-full mb-2 sm:mb-3'
+                      }`}>
+                        <motion.img
+                          src={project.image}
+                          alt={project.title}
+                          whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
+                          transition={{ duration: 0.35, ease: 'easeOut' }}
+                          className="w-full h-full object-cover transition-transform duration-500"
+                        />
                       </div>
-                    </div>
-                  </TiltCard>
-                </motion.div>
-              ))}
+
+                      {/* Title and White Circular Arrow Button */}
+                      <div className="flex-1 flex items-center justify-between p-1 pt-0 gap-1.5 w-full">
+                        <h3 className="font-heading font-bold text-xs sm:text-sm text-white leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
+                          {project.title}
+                        </h3>
+                        <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white text-[#111111] flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:text-white group-hover:rotate-45 transition-all duration-300 active:scale-95">
+                          <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        </div>
+                      </div>
+                    </TiltCard>
+                  </motion.div>
+                )
+              })}
             </AnimatePresence>
           </div>
 
@@ -636,7 +658,7 @@ export default function Home() {
       {/* -------------------------------------------------------------------------
           SECTION 4 — OUR ADVANTAGES ("CREATIVITY WITH PURPOSE") - ORBITAL BODIES
       -------------------------------------------------------------------------- */}
-      <section className="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative">
+      <section className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative overflow-hidden sm:overflow-visible">
         {/* Orbital Spheres moving in circular tracks */}
         <OrbitalSphere
           radius={110}
@@ -644,7 +666,7 @@ export default function Home() {
           direction="clockwise"
           size={14}
           color="#FF5A0A"
-          className="-top-10 -left-10 opacity-60"
+          className="-top-6 sm:-top-10 -left-6 sm:-left-10 opacity-50 scale-75 sm:scale-100 origin-center"
         />
         <OrbitalSphere
           radius={80}
@@ -652,7 +674,7 @@ export default function Home() {
           direction="counterclockwise"
           size={10}
           color="#FF732E"
-          className="-bottom-8 -right-8 opacity-50"
+          className="-bottom-6 sm:-bottom-8 -right-6 sm:-right-8 opacity-40 scale-75 sm:scale-100 origin-center"
         />
 
         <motion.div
@@ -660,22 +682,22 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-14"
+          className="mb-10 sm:mb-14"
         >
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
             <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
             <span>OUR ADVANTAGES</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
             CREATIVITY WITH <span className="text-[#FF5A0A]">PURPOSE</span>
           </h2>
-          <p className="mt-3 text-base text-[#666666] max-w-xl">
+          <p className="mt-3 text-sm sm:text-base text-[#666666] max-w-xl">
             We don't create generic templates. Every asset is strategically aligned with your growth.
           </p>
         </motion.div>
 
         {/* 3 Advantage Cards Grid with 3D Tilt */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {advantages.map((item, idx) => (
             <motion.div
               key={item.id}
@@ -739,19 +761,19 @@ export default function Home() {
       {/* -------------------------------------------------------------------------
           SECTION 5 — OUR PROCESS ("HOW IT WORKS") - CONNECTED TRAVELING ENERGY PULSE
       -------------------------------------------------------------------------- */}
-      <section className="py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative">
+      <section className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative">
         <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-14"
+          className="mb-10 sm:mb-14"
         >
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
             <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
             <span>OUR PROCESS</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
             HOW IT <span className="text-[#FF5A0A]">WORKS</span>
           </h2>
         </motion.div>
@@ -870,7 +892,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="text-4xl sm:text-6xl xl:text-7xl font-black font-heading tracking-tight text-white leading-[1.0]"
+                className="text-3xl sm:text-5xl xl:text-7xl font-black font-heading tracking-tight text-white leading-[1.05] sm:leading-[1.0]"
               >
                 LET’S BUILD
                 <br />
@@ -882,7 +904,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="text-base text-[#A0A5B5] max-w-md"
+                className="text-sm sm:text-base text-[#A0A5B5] max-w-md"
               >
                 Tell us what you're building. We'll help turn your vision into an unforgettable digital experience.
               </motion.p>
@@ -892,16 +914,17 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="pt-2 flex flex-wrap items-center gap-4"
+                className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto"
               >
                 <motion.div
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                  className="w-full sm:w-auto"
                 >
                   <Link
                     to="/contact"
-                    className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#FF5A0A] text-white font-semibold text-sm hover:bg-[#ff732e] transition-all shadow-lg shadow-[#FF5A0A]/25"
+                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#FF5A0A] text-white font-semibold text-sm hover:bg-[#ff732e] transition-all shadow-lg shadow-[#FF5A0A]/25 active:scale-98"
                   >
                     <span>Start a Project</span>
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -915,7 +938,7 @@ export default function Home() {
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/15 bg-white/5 text-white font-semibold text-sm hover:bg-white/10 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-white/15 bg-white/5 text-white font-semibold text-sm hover:bg-white/10 transition-all active:scale-98"
                 >
                   <span>Chat on WhatsApp</span>
                   <MessageCircle className="w-4 h-4 text-[#25D366]" />
@@ -924,22 +947,22 @@ export default function Home() {
             </motion.div>
 
             {/* Right Column: 3D Cinematic Astronaut Render with Rotating Orbital Rings & Scroll Parallax */}
-            <div className="lg:col-span-6 relative">
+            <div className="lg:col-span-6 relative w-full overflow-hidden sm:overflow-visible">
               {/* Concentric Gyroscopic 3D Rings */}
               <OrbitalRing
-                size={480}
+                size={440}
                 tiltX={70}
                 tiltY={25}
                 duration={22}
-                className="-top-14 -left-14 -z-10 opacity-70"
+                className="-top-6 sm:-top-14 -left-6 sm:-left-14 -z-10 opacity-60 scale-75 sm:scale-100 origin-center"
               />
               <OrbitalRing
-                size={380}
+                size={340}
                 tiltX={58}
                 tiltY={-28}
                 duration={16}
                 reverse
-                className="-bottom-10 -right-10 -z-10 opacity-60"
+                className="-bottom-6 sm:-bottom-10 -right-6 sm:-right-10 -z-10 opacity-50 scale-75 sm:scale-100 origin-center"
               />
 
               <motion.div

@@ -46,7 +46,7 @@ export default function BackToTop() {
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.92 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#111111] text-white flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-[#FF5A0A]/20 transition-all cursor-pointer group"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#111111] text-white flex items-center justify-center shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-[#FF5A0A]/20 transition-all cursor-pointer group"
           aria-label="Scroll back to top"
         >
           {/* Circular SVG Scroll Progress Ring */}

@@ -9,27 +9,27 @@ export default function Contact() {
   const initialProjectRef = searchParams.get('projectRef') || ''
 
   return (
-    <div className="pt-28 sm:pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 sm:pt-32 pb-16 sm:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="max-w-3xl mb-12 sm:mb-14">
+      <div className="max-w-3xl mb-10 sm:mb-14">
         <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
           <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
           <span>START A PROJECT</span>
         </div>
-        <h1 className="text-4xl sm:text-6xl font-black font-heading tracking-tight text-[#111111]">
+        <h1 className="text-3xl sm:text-6xl font-black font-heading tracking-tight text-[#111111]">
           LET'S BUILD SOMETHING <span className="text-[#FF5A0A]">GREAT.</span>
         </h1>
-        <p className="mt-4 text-base sm:text-lg text-[#666666] leading-relaxed">
+        <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-[#666666] leading-relaxed">
           Tell us about your brand, current challenges, and project goals. We'll review your scope and respond within 24 hours.
         </p>
       </div>
 
       {/* Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-start">
         {/* Left Column: Direct Info & Discovery Standard */}
         <div className="lg:col-span-5 space-y-6">
           {/* Main Direct Inquiries Card */}
-          <div className="bg-white rounded-[24px] p-6 sm:p-8 border border-black/5 shadow-sm space-y-6">
+          <div className="bg-white rounded-2xl sm:rounded-[24px] p-5 sm:p-8 border border-black/5 shadow-sm space-y-6">
             <h2 className="font-heading font-black text-2xl text-[#111111]">
               Direct Inquiries
             </h2>
@@ -94,7 +94,7 @@ export default function Contact() {
           </div>
 
           {/* Consultation Promise Card: OUR DISCOVERY STANDARD */}
-          <div className="bg-white rounded-[24px] p-6 sm:p-7 border border-black/5 shadow-sm space-y-4">
+          <div className="bg-white rounded-2xl sm:rounded-[24px] p-5 sm:p-7 border border-black/5 shadow-sm space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-[#111111] flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#FF5A0A]" />
               <span>Our Discovery Standard</span>
@@ -117,9 +117,9 @@ export default function Contact() {
         </div>
 
         {/* Right Column: Project Scope Form */}
-        <div className="lg:col-span-7 bg-white rounded-[24px] p-6 sm:p-10 border border-black/5 shadow-sm">
+        <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-[24px] p-5 sm:p-10 border border-black/5 shadow-sm">
           <div className="mb-6 pb-6 border-b border-black/5">
-            <h2 className="text-2xl sm:text-3xl font-black font-heading text-[#111111]">
+            <h2 className="text-xl sm:text-3xl font-black font-heading text-[#111111]">
               Project Scope Form
             </h2>
             <p className="text-xs sm:text-sm text-[#666666] mt-1">

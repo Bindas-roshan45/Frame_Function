@@ -68,7 +68,7 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-[#F5F3EF] text-[#111111] font-sans antialiased relative selection:bg-[#FF5A0A]/20 selection:text-[#FF5A0A]">
+      <div className="min-h-screen flex flex-col bg-[#F5F3EF] text-[#111111] font-sans antialiased relative selection:bg-[#FF5A0A]/20 selection:text-[#FF5A0A] overflow-x-clip w-full max-w-full">
         {/* Floating circular scroll progress back-to-top button */}
         <BackToTop />
 

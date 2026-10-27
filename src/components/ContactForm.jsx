@@ -368,7 +368,7 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
                         })
                       }
                     }}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold text-center border transition-all cursor-pointer ${
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold text-center border transition-all cursor-pointer last:col-span-2 sm:last:col-span-1 active:scale-98 ${
                       formData.budget === option
                         ? 'border-[#FF5A0A] bg-[#FF5A0A] text-white shadow-xs'
                         : 'border-black/10 bg-white text-[#666666] hover:border-black/25 hover:text-[#111111]'

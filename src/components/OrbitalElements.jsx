@@ -12,11 +12,10 @@ export function OrbitalRing({
   return (
     <div
       style={{
-        width: size,
-        height: size,
+        '--ring-size': `${size}px`,
         perspective: 800,
       }}
-      className={`pointer-events-none absolute flex items-center justify-center ${className}`}
+      className={`pointer-events-none absolute flex items-center justify-center max-w-[85vw] max-h-[85vw] aspect-square w-[min(var(--ring-size),85vw)] h-[min(var(--ring-size),85vw)] ${className}`}
     >
       <motion.div
         animate={{
@@ -56,8 +55,12 @@ export function OrbitalSphere({
 
   return (
     <div
-      className={`pointer-events-none absolute flex items-center justify-center ${className}`}
-      style={{ width: radius * 2, height: radius * 2 }}
+      className={`pointer-events-none absolute flex items-center justify-center max-w-[85vw] max-h-[85vw] aspect-square ${className}`}
+      style={{
+        '--track-size': `${radius * 2}px`,
+        width: 'min(var(--track-size), 85vw)',
+        height: 'min(var(--track-size), 85vw)',
+      }}
     >
       {/* Faint orbit track */}
       <div className="absolute inset-0 rounded-full border border-black/5 dark:border-white/5" />

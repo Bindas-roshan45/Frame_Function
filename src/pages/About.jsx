@@ -5,17 +5,17 @@ import { agencyInfo } from '../data/agencyInfo'
 
 export default function About() {
   return (
-    <div className="pt-32 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 sm:pt-32 pb-16 sm:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="max-w-3xl mb-16">
+      <div className="max-w-3xl mb-12 sm:mb-16">
         <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#646875] uppercase mb-2">
           <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
           <span>ABOUT THE STUDIO</span>
         </div>
-        <h1 className="text-4xl sm:text-6xl font-black font-heading tracking-tight text-[#0F1015]">
+        <h1 className="text-3xl sm:text-6xl font-black font-heading tracking-tight text-[#0F1015]">
           BRANDS THAT <span className="text-[#FF5A0A]">MOVE.</span>
         </h1>
-        <p className="mt-4 text-base sm:text-lg text-[#555965] leading-relaxed">
+        <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-[#555965] leading-relaxed">
           Frame &amp; Function is a digital creative agency engineered to help ambitious startups, modern businesses, and personal brands stand out through exceptional websites, compelling content, powerful branding, and creative digital experiences.
         </p>
       </div>
@@ -186,10 +186,10 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF5A0A] hover:bg-[#ff6a1f] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#FF5A0A] hover:bg-[#ff6a1f] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md active:scale-98 cursor-pointer"
                 >
                   <span>Let's Build Something</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -198,7 +198,7 @@ export default function About() {
                   href={`https://wa.me/${agencyInfo.contact.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold border border-white/10 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold border border-white/10 transition-all active:scale-98 cursor-pointer"
                 >
                   <span>Chat on WhatsApp</span>
                 </a>
@@ -266,10 +266,10 @@ export default function About() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF5A0A] hover:bg-[#ff6a1f] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-[0_0_24px_rgba(255,90,10,0.4)] cursor-pointer group"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#FF5A0A] hover:bg-[#ff6a1f] text-white text-xs sm:text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-[0_0_24px_rgba(255,90,10,0.4)] active:scale-98 cursor-pointer group"
                 >
                   <span>Let's Work Together</span>
                   <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -278,7 +278,7 @@ export default function About() {
                   href={`https://wa.me/${agencyInfo.contact.whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold border border-white/10 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold border border-white/10 transition-all active:scale-98 cursor-pointer"
                 >
                   <span>Chat on WhatsApp</span>
                 </a>
