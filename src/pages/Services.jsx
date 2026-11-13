@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { CheckCircle2, ArrowRight, MessageCircle } from 'lucide-react'
+import { CheckCircle2, ArrowRight } from 'lucide-react'
+import { Github } from '../components/SocialIcons'
 import { services } from '../data/services'
 import { agencyInfo } from '../data/agencyInfo'
 
@@ -26,13 +27,13 @@ export default function Services() {
       <div className="max-w-3xl mb-12 sm:mb-16">
         <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#646875] uppercase mb-2">
           <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-          <span>OUR CAPABILITIES</span>
+          <span>TECHNICAL CAPABILITIES</span>
         </div>
         <h1 className="text-3xl sm:text-6xl font-black font-heading tracking-tight text-[#0F1015]">
-          WHAT WE <span className="text-[#FF5A0A]">DO</span>
+          WHAT I <span className="text-[#FF5A0A]">DO</span>
         </h1>
         <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-[#555965] leading-relaxed">
-          We combine cutting-edge 3D visuals, high-conversion web development, dynamic video editing, and comprehensive brand identity systems to build brands that move.
+          I build modern web experiences, AI-powered applications, responsive interfaces, and practical software solutions backed by clean engineering.
         </p>
       </div>
 
@@ -83,7 +84,7 @@ export default function Services() {
                   {/* Included Deliverables */}
                   <div className="space-y-2.5 pt-2">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-[#0F1015]">
-                      Core Deliverables:
+                      Core Deliverables &amp; Focus:
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {service.deliverables.map((item) => (
@@ -101,18 +102,18 @@ export default function Services() {
                       to={`/contact?service=${encodeURIComponent(service.title)}`}
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#0F1015] text-white text-xs sm:text-sm font-semibold hover:bg-black/85 transition-all shadow-sm active:scale-98"
                     >
-                      <span>Inquire About This Service</span>
+                      <span>Discuss This Capability</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
 
                     <a
-                      href={agencyInfo.contact.whatsappUrl}
+                      href={agencyInfo.contact.github}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border border-black/10 bg-white text-[#0F1015] text-xs sm:text-sm font-semibold hover:bg-black/5 transition-all active:scale-98"
                     >
-                      <MessageCircle className="w-4 h-4 text-[#25D366]" />
-                      <span>WhatsApp Scoping</span>
+                      <Github className="w-4 h-4 text-[#111111]" />
+                      <span>View Code on GitHub</span>
                     </a>
                   </div>
                 </div>
@@ -125,17 +126,17 @@ export default function Services() {
       {/* Bottom Consultation Banner */}
       <div className="mt-16 sm:mt-20 p-6 sm:p-12 rounded-3xl bg-[#0A0B0E] text-white text-center space-y-4">
         <h3 className="text-xl sm:text-3xl font-black font-heading">
-          Need a Custom Multi-Discipline Package?
+          Have an Idea? Let's Build Something <span className="text-[#FF5A0A]">Together.</span>
         </h3>
         <p className="text-xs sm:text-sm text-[#A0A5B5] max-w-lg mx-auto">
-          We frequently partner with brands to handle full digital launches combining custom website engineering, video editing reels, and brand identity design.
+          I’m always interested in learning, collaborating and building meaningful technology projects.
         </p>
         <div className="pt-2">
           <Link
             to="/contact"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#FF5A0A] text-white font-semibold text-sm hover:bg-[#ff6a1f] transition-all shadow-lg active:scale-98"
           >
-            <span>Start a Project ↗</span>
+            <span>Let's Connect ↗</span>
           </Link>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react'
+import { X, CheckCircle2, ArrowRight } from 'lucide-react'
 
 export default function ProjectModal({ project, onClose }) {
   useEffect(() => {
@@ -51,9 +51,21 @@ export default function ProjectModal({ project, onClose }) {
             <X className="w-4 h-4" />
           </button>
 
-          {/* Category Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#FF5A0A]/15 text-[#FF5A0A] border border-[#FF5A0A]/30 mb-3">
-            <span>{project.category}</span>
+          {/* Category Pill & Status Badge */}
+          <div className="flex items-center gap-2 flex-wrap mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#FF5A0A]/15 text-[#FF5A0A] border border-[#FF5A0A]/30">
+              <span>{project.category}</span>
+            </div>
+            {project.status && (
+              <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium border ${
+                project.status === 'In Progress'
+                  ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                  : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${project.status === 'In Progress' ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
+                <span>Status: {project.status}</span>
+              </div>
+            )}
           </div>
 
           <h3 className="text-xl sm:text-3xl font-black font-heading text-white pr-8">
@@ -78,10 +90,26 @@ export default function ProjectModal({ project, onClose }) {
             {project.fullDescription || project.shortDescription}
           </p>
 
-          {/* Deliverables */}
+          {/* Technologies */}
+          {project.technologies && (
+            <div className="space-y-2 mb-5">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-white">
+                Technologies:
+              </h4>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="text-xs font-mono px-3 py-1 rounded-lg bg-white/10 text-white border border-white/10">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Deliverables / Key Features */}
           <div className="space-y-3 mb-5 sm:mb-6">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-white">
-              Deliverables &amp; Scope:
+              Features &amp; Scope:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {project.deliverables?.map((item) => (
@@ -93,25 +121,17 @@ export default function ProjectModal({ project, onClose }) {
             </div>
           </div>
 
-          {/* Notice on concept work */}
-          <div className="p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5 text-xs text-[#A0A5B5] mb-5 sm:mb-6">
-            <ShieldCheck className="w-4 h-4 text-[#FF5A0A] shrink-0 mt-0.5" />
-            <p className="text-[11px] sm:text-xs">
-              This showcase piece represents in-house concept exploration to demonstrate our design and engineering standards.
-            </p>
-          </div>
-
           {/* CTA */}
           <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
             <span className="text-xs text-[#A0A5B5] text-center sm:text-left">
-              Interested in a similar build?
+              Interested in collaborating or learning more?
             </span>
             <Link
-              to={`/contact?service=${encodeURIComponent(project.category)}&projectRef=${encodeURIComponent(project.title)}`}
+              to={`/contact?projectRef=${encodeURIComponent(project.title)}`}
               onClick={onClose}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#FF5A0A] text-white text-xs font-semibold hover:bg-[#ff732e] transition-all active:scale-98"
             >
-              <span>Inquire For This Service</span>
+              <span>Let's Connect</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

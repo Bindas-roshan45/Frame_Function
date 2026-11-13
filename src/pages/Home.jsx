@@ -6,52 +6,52 @@ import {
   useScroll,
   useSpring,
   useTransform,
-  useMotionValue,
   useReducedMotion,
 } from 'framer-motion'
 import {
   ArrowUpRight,
   ArrowRight,
-  Play,
-  MessageCircle,
   CheckCircle2,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
+import { Github } from '../components/SocialIcons'
 import { agencyInfo } from '../data/agencyInfo'
 import { services } from '../data/services'
 import { projects, projectCategories } from '../data/projects'
 import ProjectModal from '../components/ProjectModal'
+import ProjectImage from '../components/ProjectImage'
 import TiltCard from '../components/TiltCard'
 import {
   OrbitalRing,
   OrbitalSphere,
   FloatingParticles,
-  AnimatedProcessConnector,
 } from '../components/OrbitalElements'
 
-// Advantages data for Section 4
-const advantages = [
+// Technical Skills data for Section 4
+const technicalSkillDomains = [
   {
-    id: 'strategy',
+    id: 'frontend',
     step: '01',
-    title: 'Strategy Before Design',
-    description:
-      'We diagnose your brand context, audience, and market positioning before touching a single pixel or line of code.',
+    title: 'Frontend Development',
+    description: 'HTML5, CSS3, JavaScript, React.js, Tailwind CSS.',
+    skills: ['HTML5', 'CSS3', 'JavaScript', 'React.js', 'Tailwind CSS'],
     image: '/images/process_strategize.webp',
   },
   {
-    id: 'creative',
+    id: 'backend-databases',
     step: '02',
-    title: 'Creative Execution',
-    description:
-      'Every interaction, visual motif, and motion sequence serves to communicate clarity and inspire genuine user connection.',
+    title: 'Backend & Databases',
+    description: 'Python, Flask, FastAPI, PHP | PostgreSQL, MySQL, SQLite.',
+    skills: ['Python', 'Flask', 'FastAPI', 'PHP', 'PostgreSQL', 'MySQL', 'SQLite'],
     image: '/images/process_create.webp',
   },
   {
-    id: 'goals',
+    id: 'tools-interests',
     step: '03',
-    title: 'Built Around Your Goals',
-    description:
-      'Whether you aim for conversions, investor attention, or audience retention, our work directly aligns with your business goals.',
+    title: 'Tools & Specializations',
+    description: 'Git, GitHub, VS Code, Docker, Ollama | AI/ML, Automation, Robotics.',
+    skills: ['Git', 'GitHub', 'VS Code', 'Docker', 'Ollama', 'AI/ML', 'Robotics'],
     image: '/images/process_launch.webp',
   },
 ]
@@ -60,13 +60,6 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [selectedProject, setSelectedProject] = useState(null)
   const shouldReduceMotion = useReducedMotion()
-  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 1024 : false))
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024)
-    window.addEventListener('resize', handleResize, { passive: true })
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   // Top scroll progress bar
   const { scrollYProgress } = useScroll()
@@ -76,29 +69,35 @@ export default function Home() {
     restDelta: 0.001,
   })
 
-  // Hero section scroll & mouse parallax
+  // Hero section reference
   const heroRef = useRef(null)
-  const heroMouseX = useMotionValue(0)
-  const heroMouseY = useMotionValue(0)
-  const heroTiltX = useSpring(heroMouseY, { stiffness: 220, damping: 25 })
-  const heroTiltY = useSpring(heroMouseX, { stiffness: 220, damping: 25 })
 
-  const handleHeroMouseMove = (e) => {
-    if (shouldReduceMotion || isMobile) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const xPct = (e.clientX - rect.left) / rect.width - 0.5
-    const yPct = (e.clientY - rect.top) / rect.height - 0.5
-    heroMouseX.set(xPct * 12)
-    heroMouseY.set(-yPct * 12)
+  // Full-body introduction video state & ref
+  const videoRef = useRef(null)
+  const [videoLoaded, setVideoLoaded] = useState(false)
+  const [videoError, setVideoError] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+
+  const toggleAudio = (e) => {
+    e?.stopPropagation()
+    if (videoRef.current) {
+      const nextMuted = !isMuted
+      videoRef.current.muted = nextMuted
+      if (!nextMuted) {
+        videoRef.current.volume = 1.0
+        videoRef.current.play().catch(() => {})
+      }
+      setIsMuted(nextMuted)
+    }
   }
 
-  const handleHeroMouseLeave = () => {
-    heroMouseX.set(0)
-    heroMouseY.set(0)
-  }
-
-  // Hero mouse interactive tilt
-  // Scroll fade/blur removed to keep hero image crisp, sharp, and 100% visible at all times
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay handled by browser or video error
+      })
+    }
+  }, [])
 
   // CTA Section scroll parallax
   const ctaRef = useRef(null)
@@ -115,14 +114,6 @@ export default function Home() {
       ? projects
       : projects.filter((p) => p.category.toLowerCase() === activeCategory.toLowerCase())
 
-  const scrollToWork = () => {
-    const el = document.getElementById('our-work')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
-
   return (
     <div className="relative bg-[#F5F3EF]">
       {/* Top Scroll Progress Indicator */}
@@ -132,267 +123,202 @@ export default function Home() {
       />
 
       {/* -------------------------------------------------------------------------
-          SECTION 1 — HERO (Split Layout with 3D Orbital Showcases)
+          SECTION 1 — HERO (Cinematic Dark Studio Stage Seamlessly Matching Video)
       -------------------------------------------------------------------------- */}
       <section
         ref={heroRef}
-        className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 lg:pt-36 lg:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-visible"
+        className="relative w-full bg-[#000000] text-white pt-28 sm:pt-36 lg:pt-40 xl:pt-44 pb-16 sm:pb-20 lg:pb-28 overflow-hidden"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
-          {/* Left Column: Typography & CTAs */}
-          <div className="lg:col-span-5 space-y-6">
-            {/* Small Label Pill */}
-            <motion.div
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/10 bg-white shadow-xs text-xs font-semibold tracking-wider text-[#111111]"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#FF5A0A] animate-ping" />
-              <span>{agencyInfo.badge}</span>
-            </motion.div>
-
-            {/* Main Headline: Animated Word-by-Word with Highlighted Accent */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl xl:text-8xl font-black font-heading tracking-tight text-[#111111] leading-[1.0] sm:leading-[0.95]">
-              <motion.span
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 35 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-block"
-              >
-                {agencyInfo.headlineFirst}
-              </motion.span>
-              <br />
-              <motion.span
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 35 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-block"
-              >
-                {agencyInfo.headlineMiddle}
-              </motion.span>
-              <br />
-              <span className="relative inline-block">
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.92, rotate: -2, y: shouldReduceMotion ? 0 : 25 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[#FF5A0A] inline-flex items-baseline"
-                >
-                  {agencyInfo.headlineAccent}
-                  <span className="text-base sm:text-2xl font-bold ml-1 text-[#FF5A0A] -translate-y-4 sm:-translate-y-10">
-                    &reg;
-                  </span>
-                </motion.span>
-
-                {/* Animated glowing orange underline */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 0.9, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-                  className="h-1 sm:h-1.5 w-full bg-gradient-to-r from-[#FF5A0A] via-[#FF732E] to-transparent rounded-full origin-left mt-1 shadow-[0_0_12px_rgba(255,90,10,0.4)]"
-                />
-              </span>
-            </h1>
-
-            {/* Short Description */}
-            <motion.p
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
-              className="text-base sm:text-lg text-[#666666] font-normal leading-relaxed max-w-md"
-            >
-              Websites, Social Media, Video Editing,
-              <br className="hidden sm:inline" /> Branding &amp; Graphic Design
-            </motion.p>
-
-            {/* Buttons with magnetic micro-interaction */}
-            <motion.div
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
-              className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
-            >
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="w-full sm:w-auto"
-              >
-                <Link
-                  to="/contact"
-                  className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#111111] text-white text-sm font-semibold hover:bg-black/85 transition-all shadow-md active:scale-98"
-                >
-                  <span>Start a Project</span>
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-              </motion.div>
-
-              <motion.button
-                type="button"
-                onClick={scrollToWork}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border border-black/10 bg-white text-[#111111] text-sm font-semibold hover:bg-black/5 hover:border-black/25 transition-all cursor-pointer active:scale-98"
-              >
-                <span>Explore Work</span>
-                <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center group-hover:bg-[#FF5A0A] group-hover:text-white transition-colors">
-                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
-                </span>
-              </motion.button>
-            </motion.div>
-
-            {/* Avatar Social Proof Stack */}
-            <motion.div
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.35, ease: [0.16, 1, 0.3, 1] }}
-              className="pt-4 flex items-center gap-3.5"
-            >
-              <div className="flex -space-x-2">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=faces"
-                  alt="Client avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=faces"
-                  alt="Client avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&crop=faces"
-                  alt="Client avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces"
-                  alt="Client avatar"
-                  className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                />
-                <div className="w-8 h-8 rounded-full bg-[#FF5A0A] text-white text-xs font-bold flex items-center justify-center border-2 border-white">
-                  +
-                </div>
-              </div>
-              <p className="text-xs text-[#666666] leading-tight">
-                Ready to create something amazing?
-                <br />
-                <span className="font-semibold text-[#111111]">Let's build it together.</span>
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Right Column: 3D Composition with Rotating Orbital Rings, Particles & Mouse Parallax */}
+        {/* Ambient Dark Atmospheric Stage Lighting */}
+        <div className="absolute inset-0 pointer-events-none -z-10">
+          {/* Studio Overhead Spotlight Glow */}
           <div
-            className="lg:col-span-7 relative w-full overflow-hidden sm:overflow-visible"
-            onMouseMove={handleHeroMouseMove}
-            onMouseLeave={handleHeroMouseLeave}
-          >
-            {/* Rotating 3D Neon Rings around the composition */}
-            <OrbitalRing
-              size={440}
-              tiltX={70}
-              tiltY={20}
-              duration={24}
-              className="-top-6 sm:-top-12 -left-6 sm:-left-12 -z-10 opacity-60 scale-75 sm:scale-100 origin-center"
-            />
-            <OrbitalRing
-              size={340}
-              tiltX={55}
-              tiltY={-25}
-              duration={18}
-              reverse
-              className="-bottom-6 sm:-bottom-8 -right-6 sm:-right-8 -z-10 opacity-50 scale-75 sm:scale-100 origin-center"
-            />
-
-            {/* Ambient Floating Orange Particles */}
-            <FloatingParticles count={14} className="inset-0 sm:-inset-8" />
-
-            {/* Mouse-Tilt 3D Wrapper (Scroll-blur and opacity fade disabled to keep image 100% sharp and solid) */}
-            <motion.div
-              style={
-                shouldReduceMotion
-                  ? {}
-                  : {
-                      rotateX: isMobile ? 0 : heroTiltX,
-                      rotateY: isMobile ? 0 : heroTiltY,
-                      transformStyle: 'preserve-3d',
-                      WebkitBackfaceVisibility: 'hidden',
-                      backfaceVisibility: 'hidden',
-                      willChange: 'transform',
-                    }
-              }
-              initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95, y: shouldReduceMotion ? 0 : 25 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full perspective-[1000px]"
-            >
-              {/* Floating Container */}
-              <motion.div
-                animate={shouldReduceMotion ? {} : { y: [0, -10, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1.55 }}
-                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-black/5"
-              >
-                {/* Primary 3D Composition Render */}
-                <img
-                  src="/images/hero_composition.webp"
-                  alt="Frame & Function 3D Hero Scene with floating laptop, tablets, and devices"
-                  className="w-full h-auto object-cover select-none transform-gpu"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-
-                {/* Hand-Drawn Annotations in Caveat Font matching the reference */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-2 left-2 sm:top-4 sm:left-6 block pointer-events-none select-none"
-                >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-6deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
-                    Website<br />Development ➔
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.85, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-2 right-2 sm:top-4 sm:right-6 block pointer-events-none select-none text-right"
-                >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[4deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
-                    Video Editing<br />&amp; Reels ➔
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 2.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-12 right-2 sm:bottom-28 sm:right-4 block pointer-events-none select-none text-right"
-                >
-                  <span className="font-hand text-xs sm:text-xl font-bold text-[#111111] rotate-[-5deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
-                    Social Media<br />Management ➔
-                  </span>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 2.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-2 right-6 sm:bottom-6 sm:right-20 block pointer-events-none select-none text-right"
-                >
-                  <span className="font-hand text-[11px] sm:text-lg font-bold text-[#111111] rotate-[2deg] inline-block bg-white/90 sm:bg-transparent px-1.5 py-0.5 sm:p-0 rounded-md shadow-xs sm:shadow-none border border-black/5 sm:border-transparent">
-                    Branding &amp;<br />Graphic Design ➔
-                  </span>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          </div>
+            className="absolute top-0 right-1/4 -translate-y-1/3 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] rounded-full pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 90, 10, 0.14) 0%, rgba(255, 115, 46, 0.04) 45%, transparent 70%)',
+              filter: 'blur(50px)',
+            }}
+          />
+          {/* Subtle Left Accent Ambient Glow */}
+          <div
+            className="absolute bottom-10 left-0 w-[450px] h-[450px] rounded-full pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 90, 10, 0.08) 0%, transparent 65%)',
+              filter: 'blur(60px)',
+            }}
+          />
+          {/* Seamless bottom fade into light section */}
+          <div className="absolute bottom-0 left-0 right-0 h-20 sm:h-28 bg-gradient-to-b from-transparent to-[#F5F3EF] pointer-events-none z-10" />
         </div>
 
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-center">
+            {/* Left Column (Desktop) / Bottom Content (Mobile): Oversized Name & Details */}
+            <div className="lg:col-span-6 xl:col-span-6 order-2 lg:order-1 space-y-4 sm:space-y-5 text-center lg:text-left">
+              {/* Small Label Pill */}
+              <motion.div
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : -14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/10 backdrop-blur-md shadow-lg text-[11px] sm:text-xs font-semibold tracking-wider text-white"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#FF5A0A] animate-ping" />
+                <span className="tracking-widest uppercase">ROSHAN RAJ • DEVELOPER PORTFOLIO</span>
+              </motion.div>
 
+              {/* Oversized Name: "ROSHAN RAJ" */}
+              <h1 className="font-heading font-black tracking-tighter text-white leading-[0.88] select-none text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
+                <motion.span
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-white"
+                >
+                  ROSHAN
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-[#FF5A0A]"
+                >
+                  RAJ
+                </motion.span>
+              </h1>
+
+              {/* Short Professional Tagline Below Name */}
+              <motion.div
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center justify-center lg:justify-start gap-2.5 sm:gap-3 pt-1"
+              >
+                <span className="hidden sm:inline-block h-0.5 w-6 sm:w-8 bg-[#FF5A0A] rounded-full shrink-0" />
+                <p className="text-xs sm:text-sm lg:text-base font-bold font-heading tracking-[0.14em] sm:tracking-[0.18em] text-[#FF5A0A] uppercase">
+                  FULL STACK DEVELOPER | AI/ML ENTHUSIAST
+                </p>
+              </motion.div>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.75, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed max-w-lg mx-auto lg:mx-0 text-center lg:text-left pt-1"
+              >
+                {agencyInfo.description}
+              </motion.p>
+            </div>
+
+            {/* Right Column (Desktop) / Top Intro (Mobile): Full-Body Video Seamlessly Merged (No Frame, No Floating Animation) */}
+            <div className="lg:col-span-6 xl:col-span-6 order-1 lg:order-2 relative w-full flex items-center justify-center py-2 lg:py-0 overflow-visible">
+              {/* Static Vertical Container for Full-Body Person */}
+              <div className="relative w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] lg:max-w-[420px] xl:max-w-[460px] h-[460px] sm:h-[540px] md:h-[600px] lg:h-[660px] xl:h-[720px] flex items-center justify-center select-none">
+                {/* Overhead Spotlight Beam (Matching Video Studio Lighting) */}
+                <div
+                  className="absolute -top-16 left-1/2 -translate-x-1/2 w-64 sm:w-80 lg:w-96 h-80 sm:h-[450px] pointer-events-none -z-10"
+                  style={{
+                    background: 'radial-gradient(ellipse at 50% 0%, rgba(255, 200, 140, 0.28) 0%, rgba(255, 90, 10, 0.12) 40%, transparent 75%)',
+                    filter: 'blur(24px)',
+                  }}
+                />
+
+                {/* Ground Spotlight Pool under shoes (Matching Reference) */}
+                <div
+                  className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 w-56 sm:w-72 lg:w-80 h-10 sm:h-14 rounded-[100%] pointer-events-none -z-10"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, rgba(255, 180, 100, 0.35) 0%, rgba(255, 90, 10, 0.15) 35%, transparent 75%)',
+                    filter: 'blur(10px)',
+                  }}
+                />
+
+                {/* HTML5 Video with Object Contain, Edge-Feathering Mask & Seamless Blending (No Frame / No Border) */}
+                <div
+                  className="relative w-full h-full flex items-center justify-center group/video cursor-pointer"
+                  onClick={toggleAudio}
+                  title={isMuted ? 'Tap to enable voice' : 'Tap to mute voice'}
+                >
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    preload="auto"
+                    poster="/images/roshan1.jpeg"
+                    onLoadedData={() => {
+                      setVideoLoaded(true)
+                      setVideoError(false)
+                    }}
+                    onPlaying={() => {
+                      setVideoLoaded(true)
+                      setVideoError(false)
+                    }}
+                    onError={() => setVideoError(true)}
+                    className={`w-full h-full object-contain select-none transition-opacity duration-500 ${
+                      videoLoaded && !videoError ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    style={{
+                      maskImage: 'radial-gradient(ellipse 75% 88% at 50% 50%, black 48%, transparent 86%)',
+                      WebkitMaskImage: 'radial-gradient(ellipse 75% 88% at 50% 50%, black 48%, transparent 86%)',
+                    }}
+                  >
+                    <source src="/videos/intro.mp4" type="video/mp4" />
+                    <source src="/videos/intro1.mp4" type="video/mp4" />
+                  </video>
+
+                  {/* Graceful Fallback: Shows Full-Body Picture if Video Fails or While Loading */}
+                  {(!videoLoaded || videoError) && (
+                    <div className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+                      <picture className="w-full h-full flex items-center justify-center">
+                        <source srcSet="/images/roshan1.webp" type="image/webp" />
+                        <img
+                          src="/images/roshan1.jpeg"
+                          alt="Roshan Raj - Full Body Introduction"
+                          className="w-full h-full object-contain select-none"
+                          style={{
+                            maskImage: 'radial-gradient(ellipse 75% 88% at 50% 50%, black 48%, transparent 86%)',
+                            WebkitMaskImage: 'radial-gradient(ellipse 75% 88% at 50% 50%, black 48%, transparent 86%)',
+                          }}
+                          loading="eager"
+                          fetchPriority="high"
+                        />
+                      </picture>
+                    </div>
+                  )}
+
+                  {/* Minimal Floating Audio / Voice Toggle */}
+                  <button
+                    type="button"
+                    onClick={toggleAudio}
+                    className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-30 inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-black/85 hover:bg-black text-white text-xs font-semibold backdrop-blur-md shadow-xl border border-white/20 transition-all cursor-pointer select-none"
+                    aria-label={isMuted ? 'Enable video audio' : 'Mute video audio'}
+                  >
+                    {isMuted ? (
+                      <>
+                        <div className="w-5 h-5 rounded-full bg-[#FF5A0A] flex items-center justify-center text-white shrink-0 shadow-sm">
+                          <VolumeX className="w-3 h-3" />
+                        </div>
+                        <span className="font-mono text-xs font-medium tracking-wide">
+                          Sound OFF
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-sm">
+                          <Volume2 className="w-3 h-3" />
+                        </div>
+                        <span className="font-mono text-xs font-medium tracking-wide text-emerald-400">
+                          Sound ON
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* -------------------------------------------------------------------------
@@ -407,17 +333,17 @@ export default function Home() {
         <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-[#111111]/80">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex items-center gap-8 shrink-0">
-              <span>Website Development</span>
+              <span>Full Stack Web Development</span>
               <span className="text-[#FF5A0A]">✦</span>
-              <span>Social Media Management</span>
+              <span>AI &amp; Machine Learning</span>
               <span className="text-[#FF5A0A]">✦</span>
-              <span>Video Editing &amp; Reels</span>
+              <span>Python &amp; FastAPI</span>
               <span className="text-[#FF5A0A]">✦</span>
-              <span>Branding &amp; Graphic Design</span>
+              <span>React.js &amp; Modern UI</span>
               <span className="text-[#FF5A0A]">✦</span>
-              <span>Creative Content</span>
+              <span>Automation &amp; Robotics</span>
               <span className="text-[#FF5A0A]">✦</span>
-              <span className="text-[#FF5A0A] font-black">Ideas Into Impact</span>
+              <span className="text-[#FF5A0A] font-black">Turning Ideas Into Technology</span>
               <span className="text-[#FF5A0A]">✦</span>
             </div>
           ))}
@@ -425,7 +351,7 @@ export default function Home() {
       </motion.div>
 
       {/* -------------------------------------------------------------------------
-          SECTION 2 — SERVICES ("WHAT WE DO") - 3D INTERACTIVE TILT CARDS
+          SECTION 2 — SERVICES ("WHAT I DO") - 3D INTERACTIVE TILT CARDS
       -------------------------------------------------------------------------- */}
       <section id="what-we-do" className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden sm:overflow-visible">
         {/* Background Decorative Orbital Accent */}
@@ -448,10 +374,10 @@ export default function Home() {
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
               <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-              <span>OUR SERVICES</span>
+              <span>TECHNICAL CAPABILITIES</span>
             </div>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
-              WHAT WE <span className="text-[#FF5A0A]">DO</span>
+              WHAT I <span className="text-[#FF5A0A]">DO</span>
             </h2>
           </div>
 
@@ -459,77 +385,70 @@ export default function Home() {
             to="/services"
             className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-black/10 text-xs font-semibold text-[#111111] hover:bg-black/5 hover:border-black/25 transition-all self-start sm:self-auto"
           >
-            <span>View All Services</span>
+            <span>View All Capabilities</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
 
-        {/* 5 Service Cards Grid with 3D Tilt - 2 per row on phone, 5th card balanced full-width, 5 on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-5">
-          {services.map((service, idx) => {
-            const isFifth = idx === 4
-            return (
-              <motion.div
-                key={service.id}
-                initial={{
-                  opacity: 0,
-                  y: shouldReduceMotion ? 0 : 35,
-                  rotateY: shouldReduceMotion ? 0 : -6,
-                }}
-                whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{
-                  duration: 0.7,
-                  delay: idx * 0.12,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className={`h-full ${isFifth ? 'col-span-2 lg:col-span-1' : ''}`}
+        {/* 5 Service Cards Grid with 3D Tilt */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-5">
+          {services.map((service, idx) => (
+            <motion.div
+              key={service.id}
+              initial={{
+                opacity: 0,
+                y: shouldReduceMotion ? 0 : 35,
+                rotateY: shouldReduceMotion ? 0 : -6,
+              }}
+              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                duration: 0.7,
+                delay: idx * 0.1,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="h-full"
+            >
+              <TiltCard
+                maxTilt={8}
+                scaleOnHover={1.03}
+                glare={true}
+                className="h-full bg-white rounded-2xl p-2.5 sm:p-3 border border-black/5 shadow-xs hover:shadow-2xl hover:border-[#FF5A0A]/40 transition-all duration-300 flex flex-col justify-between group"
               >
-                <TiltCard
-                  maxTilt={8}
-                  scaleOnHover={1.03}
-                  glare={true}
-                  className={`h-full bg-white rounded-2xl p-2.5 sm:p-3 border border-black/5 shadow-xs hover:shadow-2xl hover:border-[#FF5A0A]/40 transition-shadow duration-300 flex ${
-                    isFifth ? 'flex-row sm:flex-col items-center sm:items-stretch gap-3' : 'flex-col justify-between'
-                  } group`}
-                >
-                  {/* Top Image area */}
-                  <div className={`rounded-xl overflow-hidden bg-[#F0EEEA] relative shrink-0 ${
-                    isFifth ? 'w-20 h-20 sm:w-full sm:aspect-square mb-0 sm:mb-3' : 'aspect-square w-full mb-2 sm:mb-3'
-                  }`}>
-                    <motion.img
-                      src={service.image}
-                      alt={service.title}
-                      loading="lazy"
-                      decoding="async"
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
-                      transition={{ duration: 0.35, ease: 'easeOut' }}
-                      className="w-full h-full object-cover transition-transform duration-500"
-                    />
-                  </div>
+                {/* Top Image area */}
+                <div className="w-full aspect-square rounded-xl overflow-hidden bg-[#F0EEEA] mb-2 sm:mb-3 relative shrink-0">
+                  <motion.img
+                    src={service.image}
+                    alt={service.title}
+                    loading="lazy"
+                    decoding="async"
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
+                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    className="w-full h-full object-cover transition-transform duration-500"
+                  />
+                </div>
 
-                  {/* Title and Circular Arrow Button */}
-                  <div className="flex-1 flex items-center justify-between p-1 pt-0 gap-1.5 w-full">
-                    <h3 className="font-heading font-bold text-xs sm:text-sm text-[#111111] leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
-                      {service.title}
-                    </h3>
-                    <Link
-                      to={`/services#${service.id}`}
-                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111111] text-white flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:rotate-45 transition-all duration-300 active:scale-95"
-                      aria-label={`Learn more about ${service.title}`}
-                    >
-                      <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    </Link>
-                  </div>
-                </TiltCard>
-              </motion.div>
-            )
-          })}
+                {/* Title and Circular Arrow Button */}
+                <div className="flex-1 flex items-center justify-between p-1 pt-0 gap-1.5 w-full">
+                  <h3 className="font-heading font-bold text-xs sm:text-sm text-[#111111] leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
+                    {service.title}
+                  </h3>
+                  <Link
+                    to={`/services#${service.id}`}
+                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111111] text-white flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:rotate-45 transition-all duration-300 active:scale-95"
+                    aria-label={`Learn more about ${service.title}`}
+                  >
+                    <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  </Link>
+                </div>
+              </TiltCard>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* -------------------------------------------------------------------------
-          SECTION 3 — SELECTED WORK ("OUR WORK" - FULL-WIDTH DARK SECTION: #171717)
+          SECTION 3 — SELECTED WORK ("MY PROJECTS" - FULL-WIDTH DARK SECTION: #171717)
       -------------------------------------------------------------------------- */}
       <section id="our-work" className="bg-[#171717] text-white py-16 sm:py-24 lg:py-32 relative overflow-hidden">
         {/* Subtle orange ambient glow in background */}
@@ -550,14 +469,14 @@ export default function Home() {
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#A0A5B5] uppercase mb-2">
                 <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-                <span>SELECTED WORK</span>
+                <span>PORTFOLIO SHOWCASE</span>
               </div>
               <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-white">
-                OUR <span className="text-[#FF5A0A]">WORK</span>
+                MY <span className="text-[#FF5A0A]">PROJECTS</span>
               </h2>
             </div>
 
-            {/* Filter Pills matching reference screenshot with phone horizontal scroll */}
+            {/* Filter Pills with phone horizontal scroll */}
             <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-2 scrollbar-none sm:flex-wrap">
               {projectCategories.map((cat) => (
                 <button
@@ -576,65 +495,84 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* 5 Visual Project Cards Grid with 3D Tilt - 2 per row on phone with balanced 5th card, 5 on desktop */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-5">
+          {/* 6 Visual Project Cards Grid with 3D Tilt */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             <AnimatePresence mode="popLayout">
-              {filteredProjects.map((project, idx) => {
-                const isFifth = filteredProjects.length === 5 && idx === 4
-                return (
-                  <motion.div
-                    key={project.id}
-                    layout
-                    initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: idx * 0.08,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    className={`h-full ${isFifth ? 'col-span-2 lg:col-span-1' : ''}`}
+              {filteredProjects.map((project, idx) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: idx * 0.08,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="h-full"
+                >
+                  <TiltCard
+                    maxTilt={6}
+                    scaleOnHover={1.02}
+                    glare={true}
+                    onClick={() => setSelectedProject(project)}
+                    data-cursor="view"
+                    className="h-full bg-[#202022] rounded-2xl p-3.5 sm:p-4 border border-white/10 hover:border-[#FF5A0A]/60 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
                   >
-                    <TiltCard
-                      maxTilt={7}
-                      scaleOnHover={1.03}
-                      glare={true}
-                      onClick={() => setSelectedProject(project)}
-                      data-cursor="view"
-                      className={`h-full bg-[#222222] rounded-2xl p-2.5 sm:p-3 border border-white/10 hover:border-[#FF5A0A]/60 shadow-lg hover:shadow-2xl transition-all duration-300 flex ${
-                        isFifth ? 'flex-row sm:flex-col items-center sm:items-stretch gap-3' : 'flex-col justify-between'
-                      } cursor-pointer group`}
-                    >
-                      {/* Top Mockup Image */}
-                      <div className={`rounded-xl overflow-hidden bg-black/40 relative shrink-0 ${
-                        isFifth ? 'w-24 h-20 sm:w-full sm:aspect-[4/3] mb-0 sm:mb-3' : 'aspect-[4/3] w-full mb-2 sm:mb-3'
-                      }`}>
-                        <motion.img
-                          src={project.image}
-                          alt={project.title}
-                          whileHover={shouldReduceMotion ? {} : { scale: 1.08 }}
-                          transition={{ duration: 0.35, ease: 'easeOut' }}
-                          className="w-full h-full object-cover transition-transform duration-500"
-                        />
-                      </div>
+                    {/* 1. Project image at the top */}
+                    <div className="rounded-xl overflow-hidden bg-black/40 relative aspect-[16/10] w-full mb-3 shrink-0">
+                      <ProjectImage
+                        project={project}
+                        shouldReduceMotion={shouldReduceMotion}
+                      />
+                    </div>
 
-                      {/* Title and White Circular Arrow Button */}
-                      <div className="flex-1 flex items-center justify-between p-1 pt-0 gap-1.5 w-full">
-                        <h3 className="font-heading font-bold text-xs sm:text-sm text-white leading-tight group-hover:text-[#FF5A0A] transition-colors line-clamp-2">
-                          {project.title}
-                        </h3>
-                        <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white text-[#111111] flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:text-white group-hover:rotate-45 transition-all duration-300 active:scale-95">
-                          <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                        </div>
+                    {/* 2. Project status badge (In Progress / Completed) */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold ${
+                          project.status === 'Completed'
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                            : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                        }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            project.status === 'Completed' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+                          }`}
+                        />
+                        <span>{project.status}</span>
+                      </span>
+                      <span className="text-[11px] font-mono text-[#888888]">{project.category}</span>
+                    </div>
+
+                    {/* 3. Project name */}
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-white group-hover:text-[#FF5A0A] transition-colors leading-snug mb-1.5 line-clamp-1">
+                      {project.title}
+                    </h3>
+
+                    {/* 4. Short project description */}
+                    <p className="text-xs text-[#A0A5B5] leading-relaxed line-clamp-2 mb-4 flex-1">
+                      {project.shortDescription}
+                    </p>
+
+                    {/* 5. Existing arrow button/link at the bottom */}
+                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between w-full mt-auto">
+                      <span className="text-xs font-semibold text-white/70 group-hover:text-white transition-colors">
+                        View Details
+                      </span>
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white text-[#111111] flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:text-white group-hover:rotate-45 transition-all duration-300 active:scale-95 shadow-sm">
+                        <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
-                    </TiltCard>
-                  </motion.div>
-                )
-              })}
+                    </div>
+                  </TiltCard>
+                </motion.div>
+              ))}
             </AnimatePresence>
           </div>
 
-          {/* Concept Work Notice */}
+          {/* Genuine Project Notice */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -642,13 +580,13 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 text-center text-xs font-mono text-[#888888]"
           >
-            * Demonstrating concept explorations developed in-house to showcase our engineering &amp; design standards.
+            * Personal projects and technical builds by Roshan Raj. Click any card to inspect architecture and deliverables.
           </motion.div>
         </div>
       </section>
 
       {/* -------------------------------------------------------------------------
-          SECTION 4 — OUR ADVANTAGES ("CREATIVITY WITH PURPOSE") - ORBITAL BODIES
+          SECTION 4 — TECHNICAL SKILLS ("STACK & CAPABILITIES") - ORBITAL BODIES
       -------------------------------------------------------------------------- */}
       <section className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative overflow-hidden sm:overflow-visible">
         {/* Orbital Spheres moving in circular tracks */}
@@ -678,19 +616,19 @@ export default function Home() {
         >
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
             <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-            <span>OUR ADVANTAGES</span>
+            <span>TECHNICAL PROFICIENCIES</span>
           </div>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
-            CREATIVITY WITH <span className="text-[#FF5A0A]">PURPOSE</span>
+            TECHNICAL <span className="text-[#FF5A0A]">SKILLS</span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-[#666666] max-w-xl">
-            We don't create generic templates. Every asset is strategically aligned with your growth.
+            My development stack across frontend interfaces, server-side frameworks, databases, and emerging AI technologies.
           </p>
         </motion.div>
 
-        {/* 3 Advantage Cards Grid with 3D Tilt */}
+        {/* 3 Skill Cards Grid with 3D Tilt */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-          {advantages.map((item, idx) => (
+          {technicalSkillDomains.map((item, idx) => (
             <motion.div
               key={item.id}
               initial={{
@@ -735,14 +673,25 @@ export default function Home() {
                     {item.title}
                   </h3>
 
-                  <p className="text-sm text-[#666666] leading-relaxed">
+                  <p className="text-sm text-[#666666] leading-relaxed mb-4">
                     {item.description}
                   </p>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-2.5 py-1 rounded-full text-xs font-mono bg-[#FAF8F5] border border-black/5 text-[#111111]"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-black/5 flex items-center gap-2 text-xs font-semibold text-[#111111]">
                   <CheckCircle2 className="w-4 h-4 text-[#FF5A0A]" />
-                  <span>Engineered for real impact</span>
+                  <span>Production &amp; practical application tested</span>
                 </div>
               </TiltCard>
             </motion.div>
@@ -751,27 +700,33 @@ export default function Home() {
       </section>
 
       {/* -------------------------------------------------------------------------
-          SECTION 5 — OUR PROCESS ("HOW IT WORKS") - CONNECTED TRAVELING ENERGY PULSE
+          SECTION 5 — PROFESSIONAL JOURNEY ("CAREER & EDUCATION") - HORIZONTAL TIMELINE
       -------------------------------------------------------------------------- */}
-      <section className="py-16 sm:py-20 lg:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative">
+      <section
+        id="career-journey"
+        className="pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-24 lg:pb-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-black/5 relative scroll-mt-28 lg:scroll-mt-36"
+      >
         <motion.div
           initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 sm:mb-14"
+          className="mb-8 sm:mb-12"
         >
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#666666] uppercase mb-2">
             <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-            <span>OUR PROCESS</span>
+            <span>CAREER &amp; EDUCATION</span>
           </div>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading tracking-tight text-[#111111]">
-            HOW IT <span className="text-[#FF5A0A]">WORKS</span>
+            PROFESSIONAL <span className="text-[#FF5A0A]">JOURNEY</span>
           </h2>
+          <p className="mt-2.5 text-xs sm:text-sm text-[#666666] max-w-2xl leading-relaxed">
+            My journey through undergraduate computing, frontend web engineering, and enterprise operations.
+          </p>
         </motion.div>
 
-        {/* 4 Connected Cards Grid - 2 per row on phone, 4 on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 relative">
+        {/* Connected Journey Timeline - 1 column on phone, 2 on tablet, 4 connected cards on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 relative items-stretch">
           {agencyInfo.processSteps.map((step, idx) => (
             <motion.div
               key={step.step}
@@ -780,65 +735,74 @@ export default function Home() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{
                 duration: 0.7,
-                delay: idx * 0.16,
+                delay: idx * 0.14,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="relative h-full"
+              className="relative h-full flex flex-col"
             >
-              <TiltCard
-                maxTilt={6}
-                scaleOnHover={1.03}
-                glare={true}
-                className="h-full bg-white rounded-2xl p-3 sm:p-5 border border-black/5 shadow-xs flex flex-col justify-between group hover:shadow-xl transition-all"
-              >
+              <div className="h-full bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-black/8 shadow-[0_4px_24px_rgba(0,0,0,0.03)] flex flex-col justify-between group hover:shadow-[0_12px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
                 <div>
-                  {/* Step Number & Title */}
-                  <div className="flex items-baseline gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-                    <span className="font-heading font-black text-sm sm:text-xl text-[#111111]">
+                  {/* Top Header Row: Orange Badge + Title + Subtitle */}
+                  <div className="flex items-start gap-2.5 mb-2.5">
+                    <span className="shrink-0 bg-[#FF5A0A] text-white font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg flex items-center justify-center shadow-xs">
                       {step.step}
                     </span>
-                    <span className="font-heading font-bold text-xs sm:text-lg text-[#111111] truncate">
-                      {step.title}
-                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-heading font-black text-sm sm:text-base text-[#111111] leading-tight truncate">
+                        {step.title}
+                      </h3>
+                      {step.step === '02' && (
+                        <p className="text-[11px] text-[#666666] font-medium leading-tight mt-0.5 truncate">
+                          Web Developer • Oct 2025 – Apr 2026
+                        </p>
+                      )}
+                      {step.step === '03' && (
+                        <p className="text-[11px] text-[#666666] font-medium leading-tight mt-0.5 truncate">
+                          SAP Operator / Associate • Oct 2026 – Present
+                        </p>
+                      )}
+                      {step.step === '04' && (
+                        <p className="text-[11px] text-[#FF5A0A] font-semibold leading-tight mt-0.5 flex items-center gap-1 truncate">
+                          <span>📖</span> Personal Learning Journey
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  {/* 3D Illustration Area with Step-Specific Micro Animations */}
-                  <div className="w-full aspect-square rounded-xl bg-[#F0EEEA] p-2 sm:p-3 flex items-center justify-center overflow-hidden mb-2 sm:mb-4 relative">
-                    <motion.img
+                  {/* Clean Visual Preview with consistent 16:10 aspect ratio and rounded corners */}
+                  <div className="w-full aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden bg-[#F0EEEA] my-3 relative border border-black/5 shadow-inner">
+                    <img
                       src={step.image}
                       alt={step.title}
                       loading="lazy"
                       decoding="async"
-                      animate={
-                        shouldReduceMotion
-                          ? {}
-                          : idx === 0
-                          ? { rotate: [-2, 2, -2] }
-                          : idx === 1
-                          ? { scale: [1, 1.04, 1] }
-                          : idx === 2
-                          ? { filter: ['drop-shadow(0 0 2px rgba(255,90,10,0.2))', 'drop-shadow(0 0 10px rgba(255,90,10,0.5))', 'drop-shadow(0 0 2px rgba(255,90,10,0.2))'] }
-                          : { y: [0, -6, 0] }
-                      }
-                      transition={{
-                        duration: idx === 0 ? 4 : idx === 1 ? 3 : idx === 2 ? 2.5 : 3.5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-                      className="w-full h-full object-contain transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                 </div>
 
-                <p className="text-[11px] sm:text-xs text-[#666666] leading-relaxed line-clamp-3 sm:line-clamp-none">
+                {/* Description below image */}
+                <p className="text-xs text-[#555555] leading-relaxed mt-1">
                   {step.description}
                 </p>
-              </TiltCard>
+              </div>
 
-              {/* Connected Line with Traveling Orange Energy Pulse on Desktop */}
+              {/* Connecting Orange Circular Arrow between cards on desktop */}
               {idx < agencyInfo.processSteps.length - 1 && (
-                <AnimatedProcessConnector />
+                <div className="hidden lg:flex items-center justify-center absolute -right-3.5 xl:-right-4 top-[50%] -translate-y-1/2 z-20 pointer-events-none">
+                  <div className="w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-[#FF5A0A] text-white flex items-center justify-center shadow-[0_2px_10px_rgba(255,90,10,0.4)] ring-4 ring-[#F5F3EF]">
+                    <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 stroke-[2.5]" />
+                  </div>
+                </div>
+              )}
+
+              {/* Connecting Orange Circular Arrow for tablet 2x2 grid */}
+              {(idx === 0 || idx === 2) && (
+                <div className="hidden sm:flex lg:hidden items-center justify-center absolute -right-3.5 top-[50%] -translate-y-1/2 z-20 pointer-events-none">
+                  <div className="w-6 h-6 rounded-full bg-[#FF5A0A] text-white flex items-center justify-center shadow-md ring-4 ring-[#F5F3EF]">
+                    <ArrowRight className="w-3 h-3 stroke-[2.5]" />
+                  </div>
+                </div>
               )}
             </motion.div>
           ))}
@@ -846,7 +810,7 @@ export default function Home() {
       </section>
 
       {/* -------------------------------------------------------------------------
-          SECTION 6 — FINAL CTA ("LET'S BUILD SOMETHING GREAT" - DARK BACKGROUND: #171717)
+          SECTION 6 — FINAL CTA ("HAVE AN IDEA? LET'S BUILD SOMETHING TOGETHER")
       -------------------------------------------------------------------------- */}
       <section
         ref={ctaRef}
@@ -876,7 +840,7 @@ export default function Home() {
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-semibold tracking-wider text-[#A0A5B5] uppercase"
               >
                 <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-                <span>LET'S WORK TOGETHER</span>
+                <span>LET'S CONNECT</span>
               </motion.div>
 
               <motion.h2
@@ -886,9 +850,9 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="text-3xl sm:text-5xl xl:text-7xl font-black font-heading tracking-tight text-white leading-[1.05] sm:leading-[1.0]"
               >
-                LET’S BUILD
+                HAVE AN IDEA?
                 <br />
-                SOMETHING <span className="text-[#FF5A0A]">GREAT.</span>
+                LET’S BUILD <span className="text-[#FF5A0A]">TOGETHER.</span>
               </motion.h2>
 
               <motion.p
@@ -898,7 +862,7 @@ export default function Home() {
                 transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="text-sm sm:text-base text-[#A0A5B5] max-w-md"
               >
-                Tell us what you're building. We'll help turn your vision into an unforgettable digital experience.
+                I’m always interested in learning, collaborating and building meaningful technology projects.
               </motion.p>
 
               <motion.div
@@ -918,13 +882,13 @@ export default function Home() {
                     to="/contact"
                     className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#FF5A0A] text-white font-semibold text-sm hover:bg-[#ff732e] transition-all shadow-lg shadow-[#FF5A0A]/25 active:scale-98"
                   >
-                    <span>Start a Project</span>
+                    <span>Let's Connect</span>
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </Link>
                 </motion.div>
 
                 <motion.a
-                  href={agencyInfo.contact.whatsappUrl}
+                  href={agencyInfo.contact.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.04 }}
@@ -932,8 +896,8 @@ export default function Home() {
                   transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-white/15 bg-white/5 text-white font-semibold text-sm hover:bg-white/10 transition-all active:scale-98"
                 >
-                  <span>Chat on WhatsApp</span>
-                  <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                  <Github className="w-4 h-4 text-white" />
+                  <span>GitHub: {agencyInfo.contact.githubUsername}</span>
                 </motion.a>
               </motion.div>
             </motion.div>

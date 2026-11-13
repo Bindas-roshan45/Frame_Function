@@ -13,7 +13,7 @@ const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
-// Minimal, elegant route loading fallback matching Frame & Function brand aesthetic
+// Minimal, elegant route loading fallback matching Roshan Raj brand aesthetic
 function PageLoadingFallback() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">

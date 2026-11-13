@@ -7,6 +7,6 @@ export const navLinks = [
 ]
 
 export const navCTA = {
-  label: "Let's Talk ↗",
+  label: "Let's Connect ↗",
   href: '/contact',
 }

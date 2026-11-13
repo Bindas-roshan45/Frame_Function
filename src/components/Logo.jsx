@@ -5,12 +5,16 @@ export default function Logo({ light = false, className = '' }) {
     <Link
       to="/"
       className={`inline-flex items-center gap-2.5 select-none group ${className}`}
-      aria-label="Frame &amp; Function Home"
+      aria-label="Roshan Raj Portfolio Home"
     >
-      <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center shrink-0">
+      <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden flex items-center justify-center shrink-0">
         <img
-          src={light ? '/images/logo_mark_white.png' : '/images/logo_mark_dark.png'}
-          alt="Frame &amp; Function Logo"
+          src={light ? '/images/logo.png' : '/images/logo_mark_dark.png'}
+          onError={(e) => {
+            e.currentTarget.onerror = null
+            e.currentTarget.src = '/images/logo.png'
+          }}
+          alt="Roshan Raj Logo"
           className="w-full h-full object-contain transition-transform duration-500 ease-out group-hover:scale-110"
         />
       </div>
@@ -20,7 +24,7 @@ export default function Logo({ light = false, className = '' }) {
           light ? 'text-white' : 'text-[#111111]'
         }`}
       >
-        Frame <span className="text-[#BA9E79]">&amp;</span> Function
+        Roshan <span className="text-[#FF5A0A]">Raj</span>
       </span>
     </Link>
   )

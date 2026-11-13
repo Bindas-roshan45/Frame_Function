@@ -73,7 +73,7 @@ export default function ServiceCard({ service, index = 0 }) {
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                 </div>
                 <div className="flex-1 text-center bg-white/5 py-1 px-3 rounded-md text-[10px] text-[#A1A1AA] truncate">
-                  frameandfunction.agency/preview
+                  roshanraj.dev/preview
                 </div>
               </div>
               <div className="p-2 rounded bg-white/[0.02] border border-white/5 space-y-2">
@@ -92,7 +92,7 @@ export default function ServiceCard({ service, index = 0 }) {
               <div className="flex items-center justify-between pb-2 border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#38BDF8]" />
-                  <span className="text-[11px] text-white font-medium">@frame.function</span>
+                  <span className="text-[11px] text-white font-medium">@roshan_raj45</span>
                 </div>
                 <span className="text-[10px] text-[#C7F36B]">Audience Growth</span>
               </div>

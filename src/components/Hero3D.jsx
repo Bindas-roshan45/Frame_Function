@@ -249,7 +249,7 @@ export default function Hero3D() {
     <div
       ref={mountRef}
       className="relative w-full h-[380px] sm:h-[480px] lg:h-[560px] flex items-center justify-center select-none"
-      aria-label="Interactive 3D Abstract Geometry representing Frame & Function"
+      aria-label="Interactive 3D Abstract Geometry representing Roshan Raj Portfolio"
     >
       {/* Background radial glow behind the 3D element */}
       <div className="absolute inset-0 -z-10 pointer-events-none flex items-center justify-center">

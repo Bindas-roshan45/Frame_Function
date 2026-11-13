@@ -24,21 +24,21 @@ export default function Work() {
         <div className="max-w-3xl mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-[#A0A5B5] uppercase mb-2">
             <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
-            <span>PORTFOLIO ARCHIVE</span>
+            <span>PORTFOLIO PROJECTS</span>
           </div>
           <h1 className="text-3xl sm:text-6xl font-black font-heading tracking-tight text-white">
-            OUR <span className="text-[#FF5A0A]">WORK</span>
+            MY <span className="text-[#FF5A0A]">PROJECTS</span>
           </h1>
           <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-[#A0A5B5] leading-relaxed">
-            Explore our curated showcase of websites, high-retention video reels, social media campaigns, and brand identities.
+            A curated showcase of my software applications, AI assistants, web platforms, and engineering builds.
           </p>
         </div>
 
-        {/* Concept Work Disclosure Banner */}
+        {/* Project Transparency / Architecture Banner */}
         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-start sm:items-center gap-3 text-xs sm:text-sm text-[#A0A5B5] mb-8 sm:mb-10">
           <ShieldCheck className="w-5 h-5 text-[#FF5A0A] shrink-0 mt-0.5 sm:mt-0" />
           <p>
-            <strong className="text-white">Transparency Notice:</strong> All projects displayed below are in-house demonstration showcases developed by Frame &amp; Function to illustrate our technical frontend, visual identity, and motion capabilities without fabricating client claims.
+            <strong className="text-white">Authentic Portfolio:</strong> Showcasing personal projects, academic applications, and active technical initiatives developed by Roshan Raj. Accurate statuses maintained across every build.
           </p>
         </div>
 
@@ -74,15 +74,15 @@ export default function Work() {
                 className="h-full"
               >
                 <TiltCard
-                  maxTilt={7}
-                  scaleOnHover={1.03}
+                  maxTilt={6}
+                  scaleOnHover={1.02}
                   glare={true}
                   onClick={() => setSelectedProject(project)}
                   data-cursor="view"
                   className="h-full bg-[#161822] rounded-3xl p-4 border border-white/10 hover:border-[#FF5A0A]/50 transition-all duration-300 flex flex-col justify-between cursor-pointer shadow-lg group"
                 >
-                  {/* Project Mockup Image */}
-                  <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-black/40 relative mb-4">
+                  {/* 1. Project image at the top */}
+                  <div className="aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/40 relative mb-3.5 shrink-0">
                     <img
                       src={project.image}
                       alt={project.title}
@@ -90,22 +90,42 @@ export default function Work() {
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[11px] font-mono text-white/90 border border-white/10">
-                      {project.category}
-                    </div>
                   </div>
 
-                  {/* Title & Circular Action Button */}
-                  <div className="flex items-center justify-between p-1">
-                    <div>
-                      <h3 className="font-heading font-bold text-lg text-white group-hover:text-[#FF5A0A] transition-colors">
-                        {project.title}
-                      </h3>
-                      <p className="text-xs text-[#A0A5B5] mt-0.5">
-                        {project.subtitle}
-                      </p>
-                    </div>
+                  {/* 2. Project status badge (In Progress / Completed) */}
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold ${
+                        project.status === 'Completed'
+                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                          : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          project.status === 'Completed' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+                        }`}
+                      />
+                      <span>{project.status}</span>
+                    </span>
+                    <span className="text-[11px] font-mono text-[#888888]">{project.category}</span>
+                  </div>
 
+                  {/* 3. Project name */}
+                  <h3 className="font-heading font-bold text-lg text-white group-hover:text-[#FF5A0A] transition-colors leading-snug mb-1.5 line-clamp-1">
+                    {project.title}
+                  </h3>
+
+                  {/* 4. Short project description */}
+                  <p className="text-xs text-[#A0A5B5] leading-relaxed line-clamp-2 mb-4 flex-1">
+                    {project.shortDescription}
+                  </p>
+
+                  {/* 5. Existing arrow button/link at the bottom */}
+                  <div className="pt-2.5 border-t border-white/10 flex items-center justify-between w-full mt-auto">
+                    <span className="text-xs font-semibold text-white/70 group-hover:text-white transition-colors">
+                      View Details
+                    </span>
                     <div className="w-8 h-8 rounded-full bg-white text-[#0F1015] flex items-center justify-center shrink-0 group-hover:bg-[#FF5A0A] group-hover:text-white group-hover:rotate-45 transition-all duration-300">
                       <ArrowUpRight className="w-4 h-4" />
                     </div>
@@ -119,17 +139,17 @@ export default function Work() {
         {/* Bottom CTA */}
         <div className="mt-24 p-8 sm:p-12 rounded-3xl bg-white/5 border border-white/10 text-center max-w-3xl mx-auto space-y-4">
           <h3 className="text-2xl sm:text-3xl font-black font-heading text-white">
-            Have a project in mind?
+            Have an Idea? Let's Build Something <span className="text-[#FF5A0A]">Together.</span>
           </h3>
           <p className="text-sm text-[#A0A5B5] max-w-md mx-auto">
-            Let's discuss how we can build a tailored digital experience for your brand.
+            I’m always interested in learning, collaborating and building meaningful technology projects.
           </p>
           <div className="pt-2 flex justify-center">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF5500] text-white font-semibold text-sm hover:bg-[#ff6a1f] transition-all shadow-md"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF5A0A] text-white font-semibold text-sm hover:bg-[#ff732e] transition-all shadow-md"
             >
-              <span>Start a Project</span>
+              <span>Let's Connect</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

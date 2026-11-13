@@ -18,11 +18,14 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
+      setScrolled(window.scrollY > 40)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Adapt to dark hero on homepage when at the top
+  const isDarkHero = location.pathname === '/' && !scrolled
 
   return (
     <motion.header
@@ -32,22 +35,33 @@ export default function Navbar() {
       className="fixed top-3 left-0 right-0 z-40 transition-all duration-300 pointer-events-none"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className={`pointer-events-auto flex items-center justify-between px-3 sm:px-6 py-2 sm:py-2.5 rounded-full border transition-all ${
-          scrolled ? 'bg-[#FAF8F5]/95 border-black/15 shadow-md' : 'bg-[#FAF8F5]/90 border-black/10 shadow-sm'
-        } backdrop-blur-md`}>
+        <nav
+          className={`pointer-events-auto flex items-center justify-between px-3 sm:px-6 py-2 sm:py-2.5 rounded-full border transition-all duration-300 ${isDarkHero
+            ? 'bg-black/85 border-white/15 text-white shadow-2xl backdrop-blur-md'
+            : scrolled
+              ? 'bg-[#FAF8F5]/95 border-black/15 shadow-md backdrop-blur-md text-[#111111]'
+              : 'bg-[#FAF8F5]/90 border-black/10 shadow-sm backdrop-blur-md text-[#111111]'
+            }`}
+        >
           {/* Logo on Left */}
-          <Logo />
+          <Logo light={isDarkHero} />
 
           {/* Center Navigation Links (Rounded pill menu matching reference) */}
-          <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full border border-black/5 bg-[#F0EEEA]/80 shadow-xs backdrop-blur-xs">
+          <div
+            className={`hidden md:flex items-center gap-1 px-2 py-1 rounded-full border shadow-xs backdrop-blur-xs transition-colors duration-300 ${isDarkHero ? 'border-white/10 bg-white/5' : 'border-black/5 bg-[#F0EEEA]/80'
+              }`}
+          >
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
                 to={link.href}
                 className={({ isActive }) =>
-                  `relative px-4 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all duration-200 select-none ${
-                    isActive
-                      ? 'text-[#111111]'
+                  `relative px-4 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all duration-200 select-none ${isActive
+                    ? isDarkHero
+                      ? 'text-white'
+                      : 'text-[#111111]'
+                    : isDarkHero
+                      ? 'text-white/70 hover:text-white'
                       : 'text-[#666666] hover:text-[#111111]'
                   }`
                 }
@@ -58,7 +72,8 @@ export default function Navbar() {
                     {isActive && (
                       <motion.div
                         layoutId="activePillTab"
-                        className="absolute inset-0 rounded-full bg-white border border-black/5 shadow-xs"
+                        className={`absolute inset-0 rounded-full border shadow-xs ${isDarkHero ? 'bg-white/15 border-white/15' : 'bg-white border-black/5'
+                          }`}
                         transition={{ type: 'spring', duration: 0.4, bounce: 0.15 }}
                       />
                     )}
@@ -68,7 +83,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right: Black "Let's Talk ↗" Pill Button */}
+          {/* Right: CTA Pill Button */}
           <div className="hidden md:flex items-center gap-3">
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -77,9 +92,12 @@ export default function Navbar() {
             >
               <NavLink
                 to="/contact"
-                className="group inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#111111] text-white text-xs lg:text-sm font-semibold hover:bg-black/85 transition-all shadow-sm"
+                className={`group inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-xs lg:text-sm font-semibold transition-all shadow-sm ${isDarkHero
+                  ? 'bg-[#FF5A0A] hover:bg-[#FF732E] text-white shadow-md shadow-[#FF5A0A]/20'
+                  : 'bg-[#111111] hover:bg-black/85 text-white'
+                  }`}
               >
-                <span>Let's Talk</span>
+                <span>Let's Connect</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </NavLink>
             </motion.div>
@@ -89,14 +107,16 @@ export default function Navbar() {
           <div className="flex items-center gap-1.5 md:hidden">
             <NavLink
               to="/contact"
-              className="px-3 py-1.5 rounded-full bg-[#111111] text-white text-[11px] font-bold tracking-tight active:scale-95 transition-transform"
+              className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-tight active:scale-95 transition-transform ${isDarkHero ? 'bg-[#FF5A0A] text-white' : 'bg-[#111111] text-white'
+                }`}
             >
-              Talk ↗
+              Connect ↗
             </NavLink>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-8 h-8 rounded-full border border-black/10 bg-white flex items-center justify-center text-[#111111] cursor-pointer active:scale-95 transition-transform"
+              className={`w-8 h-8 rounded-full border flex items-center justify-center cursor-pointer active:scale-95 transition-transform ${isDarkHero ? 'border-white/20 bg-white/10 text-white' : 'border-black/10 bg-white text-[#111111]'
+                }`}
               aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -130,10 +150,9 @@ export default function Navbar() {
                     to={link.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={({ isActive }) =>
-                      `flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all ${
-                        isActive
-                          ? 'bg-[#FF5A0A]/10 text-[#FF5A0A]'
-                          : 'text-[#111111] hover:bg-black/5 active:bg-black/5'
+                      `flex items-center justify-between px-4 py-3 rounded-2xl text-base font-bold transition-all ${isActive
+                        ? 'bg-[#FF5A0A]/10 text-[#FF5A0A]'
+                        : 'text-[#111111] hover:bg-black/5 active:bg-black/5'
                       }`
                     }
                   >
@@ -149,25 +168,27 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[#FF5A0A] text-white font-bold text-sm shadow-md active:scale-98 transition-transform"
                 >
-                  <span>Start a Project</span>
+                  <span>Let's Connect</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </NavLink>
 
                 <div className="pt-2 flex items-center justify-center gap-4 text-xs font-semibold text-[#666666]">
                   <a
-                    href="tel:+916203487580"
+                    href="https://github.com/Bindas-roshan45"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:text-[#FF5A0A] transition-colors py-1"
                   >
-                    Call: +91 6203487580
+                    GitHub: Bindas-roshan45
                   </a>
                   <span>•</span>
                   <a
-                    href="https://wa.me/916203487580"
+                    href="https://youtube.com/@roshan_raj45"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-[#25D366] transition-colors py-1"
+                    className="hover:text-[#FF5A0A] transition-colors py-1"
                   >
-                    WhatsApp
+                    YouTube
                   </a>
                 </div>
               </div>

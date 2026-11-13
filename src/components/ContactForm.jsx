@@ -5,20 +5,20 @@ import confetti from 'canvas-confetti'
 import { agencyInfo } from '../data/agencyInfo'
 
 const SERVICE_OPTIONS = [
-  'Website Development',
-  'Social Media Management',
-  'Video Editing & Reels',
-  'Branding & Graphic Design',
-  'Creative Content',
-  'Full Brand Overhaul',
+  'Full Stack Web Development',
+  'Responsive Website Development',
+  'AI Integration & Automation',
+  'UI/UX Implementation',
+  'Website Maintenance',
+  'Project Collaboration / Other',
 ]
 
 const BUDGET_OPTIONS = [
-  'Under ₹4,000',
-  '₹4,000 – ₹7,000',
-  '₹7,000 – ₹15,000',
-  '₹15,000+',
-  'Flexible Budget',
+  'Project Collaboration',
+  'Internship / Full-Time',
+  'Freelance Work',
+  'Open Source / Learning',
+  'General Inquiry',
 ]
 
 export default function ContactForm({ initialService = '', initialProjectRef = '' }) {
@@ -29,7 +29,7 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
     service: initialService
       ? (SERVICE_OPTIONS.find((s) => s.toLowerCase().includes(initialService.toLowerCase())) || SERVICE_OPTIONS[0])
       : SERVICE_OPTIONS[0],
-    budget: '₹4,000 – ₹7,000',
+    budget: 'Project Collaboration',
     projectDetails: initialProjectRef ? `Inquiring about project reference: ${initialProjectRef}. ` : '',
     consent: false,
   })
@@ -146,9 +146,9 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
   const mailtoUrl = `mailto:${agencyInfo.contact.email}?subject=${mailtoSubject}&body=${mailtoBody}`
 
   const waCustomMessage = encodeURIComponent(
-    `Hi Frame & Function! My name is ${formData.name || 'there'}. I'm inquiring about ${formData.service} (Budget: ${formData.budget}). Project Overview: ${formData.projectDetails || "Let's talk!"}`
+    `Hi Roshan! My name is ${formData.name || 'there'}. I'm inquiring about ${formData.service} (${formData.budget}). Project Overview: ${formData.projectDetails || "Let's connect!"}`
   )
-  const dynamicWhatsAppUrl = `https://wa.me/${agencyInfo.contact.whatsappNumber}?text=${waCustomMessage}`
+  const dynamicWhatsAppUrl = `https://wa.me/?text=${waCustomMessage}`
 
   return (
     <div className="w-full">
@@ -164,10 +164,10 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-2xl sm:text-3xl font-black font-heading text-[#111111]">
-              Inquiry Received!
+              Message Received!
             </h3>
             <p className="text-[#666666] max-w-md mx-auto text-sm leading-relaxed">
-              Thank you for reaching out to Frame &amp; Function. We have received your project details and will review them promptly within 24 hours.
+              Thank you for reaching out to Roshan Raj. I have received your message and will review it promptly.
             </p>
             <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
               <a
@@ -415,7 +415,7 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
                   className="mt-0.5 w-4 h-4 rounded border-black/20 text-[#FF5A0A] focus:ring-[#FF5A0A]"
                 />
                 <span className="text-xs text-[#666666] leading-snug">
-                  I consent to sharing this project information with Frame &amp; Function for consultation and scoping.
+                  I consent to sharing this project information with Roshan Raj for discussion and collaboration.
                 </span>
               </label>
               {errors.consent && (
@@ -423,7 +423,7 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
               )}
             </div>
 
-            {/* Bottom Actions: Orange Submit + White Outlined WhatsApp */}
+            {/* Bottom Actions: Orange Submit */}
             <div className="pt-2 flex flex-col sm:flex-row items-center gap-3.5">
               <button
                 type="submit"
@@ -431,7 +431,7 @@ export default function ContactForm({ initialService = '', initialProjectRef = '
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#FF5A0A] text-white font-bold text-sm hover:bg-[#e04f08] transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-70"
               >
                 <Send className="w-4 h-4" />
-                <span>{status === 'submitting' ? 'Sending...' : 'Submit Inquiry'}</span>
+                <span>{status === 'submitting' ? 'Sending...' : 'Send Message'}</span>
               </button>
 
               <a
